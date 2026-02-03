@@ -1,10 +1,10 @@
 <?php
 try {
-    $strConnection = "mysql:host=localhost;dbname=salle;port=3306";
+    $strConnection = "mysql:host=10.10.67.227;dbname=maeld;port=3306;";
 
     $pdo = new PDO(
         $strConnection,
-        "root",
+        "MaelD",
         "root",
         [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
