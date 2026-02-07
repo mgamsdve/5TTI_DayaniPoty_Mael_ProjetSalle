@@ -21,6 +21,9 @@
     <footer>
         <?php require_once("Views/Components/footer.php"); ?>
     </footer>
+
+    <script src="/Assets/js/app.js"></script>
+
 </body>
 
 </html>

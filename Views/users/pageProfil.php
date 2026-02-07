@@ -1,17 +1,49 @@
-<h1>Page profil</h1>
+<h1 class="section-title">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="7" r="4" />
+        <path d="M5.5 21a6.5 6.5 0 0 1 13 0" />
+    </svg>
+    Mon profil
+</h1>
 
-<form action="" method="POST">
+<?php if (!empty($erreur)) : ?>
+    <div class="form-error"><?= $erreur ?></div>
+<?php endif; ?>
 
-    <label for="nom">Nom</label><br>
-    <input type="text" name="nom" id="nom" value=<?= $_SESSION["user"]->uti_nom ?>><br>
+<form method="POST" class="form-card">
 
-    <label for="prenom">Prénom</label><br>
-    <input type="text" name="prenom" id="prenom" value=<?= $_SESSION["user"]->uti_prenom ?>><br>
+    <div class="input-group">
+        <input type="text" name="nom"
+            value="<?= htmlspecialchars($_SESSION["user"]->uti_nom) ?>">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="7" r="4" />
+            <path d="M5.5 21a6.5 6.5 0 0 1 13 0" />
+        </svg>
+    </div>
 
-    <label for="email">Email</label><br>
-    <input type="email" name="email" id="email" value=<?= $_SESSION["user"]->uti_email ?>><br>
+    <div class="input-group">
+        <input type="text" name="prenom"
+            value="<?= htmlspecialchars($_SESSION["user"]->uti_prenom) ?>">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="7" r="4" />
+            <path d="M5.5 21a6.5 6.5 0 0 1 13 0" />
+        </svg>
+    </div>
 
-    <a href=""> Mot de passe Réinitialiser</a><br>
-    <a href="deleteProfil">Supprimer</a><br>
-    <input type="submit" value="Envoyer" name="envoyer">
+    <div class="input-group">
+        <input type="email" name="email"
+            value="<?= htmlspecialchars($_SESSION["user"]->uti_email) ?>">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <path d="M3 7l9 6 9-6" />
+        </svg>
+    </div>
+
+    <input type="submit" value="Mettre à jour" name="envoyer" class="btn-full">
 </form>
+
+<div class="danger-zone">
+    <a href="/deleteProfil" class="delete-link">
+        Supprimer mon compte
+    </a>
+</div>
