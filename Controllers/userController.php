@@ -35,6 +35,8 @@ if ($uri == "/inscription") {
     if (isset($_POST["envoyer"])) {
         $user = selectUserByEmailAndPassword($pdo);
         if ($user) {
+            $_SESSION["user"] = $user;
+            header("location:/");
             $message = "Connecté";
         } else {
             $message = "Mauvais email ou MDP";
@@ -42,4 +44,25 @@ if ($uri == "/inscription") {
     }
     $template = "Views/users/pageConnexion.php";
     $title = "Connexion";
+} elseif ($uri == "/deconnexion") {
+    session_destroy();
+    header("location:/");
+} elseif ($uri == "/Profil") {
+    if (isset($_POST["envoyer"])) {
+
+        if (
+            empty($_POST["nom"]) ||
+            empty($_POST["prenom"]) ||
+            empty($_POST["email"]) ||
+            empty($_POST["mdp"])
+        ) {
+            $erreur = "Tous les champs doivent être remplis";
+        } else {
+            updateUser($pdo);
+            header("location:/Profil");
+        }
+    }
+
+    $template = "Views/users/pageProfil.php";
+    $title = "Mon Profil";
 }

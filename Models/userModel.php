@@ -64,3 +64,21 @@ function selectUserByEmailAndPassword($pdo)
         die($message);
     }
 }
+
+function updateUser($pdo)
+{
+    try {
+        $query = 'UPDATE utilisateur set uti_nom = :nom, uti_prenom = :prenom, uti_email = :email
+            WHERE id_utilisateur = :userId';
+        $insertUser = $pdo->prepare($query); //préparer la query
+        $insertUser->execute([
+            "nom"    => $_POST["nom"],
+            "prenom" => $_POST["prenom"],
+            "email"  => $_POST["email"],
+            "userId"   => $_SESSION["user"]->id_utilisateur
+        ]); //exécuter la query
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}
