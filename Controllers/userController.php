@@ -53,16 +53,22 @@ if ($uri == "/inscription") {
         if (
             empty($_POST["nom"]) ||
             empty($_POST["prenom"]) ||
-            empty($_POST["email"]) ||
-            empty($_POST["mdp"])
+            empty($_POST["email"])
         ) {
             $erreur = "Tous les champs doivent être remplis";
         } else {
             updateUser($pdo);
+            updateSession($pdo);
             header("location:/Profil");
         }
     }
 
+    $template = "Views/users/pageProfil.php";
+    $title = "Mon Profil";
+} elseif ($uri == "/deleteProfil") {
+    deleteUser($pdo);
+    session_destroy();
+    header("location:/");
     $template = "Views/users/pageProfil.php";
     $title = "Mon Profil";
 }
