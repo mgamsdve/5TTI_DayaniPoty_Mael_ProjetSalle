@@ -10,16 +10,20 @@
 </head>
 
 <body>
-    <header>
-        <?php require_once("Views/Components/header.php"); ?>
+    <header class="glass">
+        <div class="container">
+            <?php require_once("Views/Components/header.php"); ?>
+        </div>
     </header>
 
-    <main>
+    <main class="fade-in">
         <?php require_once($template); ?>
     </main>
 
-    <footer>
-        <?php require_once("Views/Components/footer.php"); ?>
+    <footer class="fade-in">
+        <div class="container">
+            <?php require_once("Views/Components/footer.php"); ?>
+        </div>
     </footer>
 </body>
 

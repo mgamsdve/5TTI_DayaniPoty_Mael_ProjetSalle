@@ -1,9 +1,15 @@
+<h1>Liste des Salles</h1>
+
 <div class="Salle-container">
     <?php foreach ($salles as $salle): ?>
         <div class="salle">
+            <div class="salle-icon">🏢</div>
             <h3><?= $salle->sal_nom ?></h3>
-            <p>Taille : <?= $salle->sal_taille ?> m²</p>
-            <p>Numéro : <?= $salle->sal_numero ?></p>
+            <p><strong>Capacité/Taille :</strong> <?= $salle->sal_taille ?> m²</p>
+            <p><strong>Référence :</strong> <?= $salle->sal_numero ?></p>
+            <div class="salle-link">
+                <a href="/Salle/Details/<?= $salle->sal_numero ?>" class="btn-link">Voir détails</a>
+            </div>
         </div>
     <?php endforeach; ?>
 </div>

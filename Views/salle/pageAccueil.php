@@ -1,19 +1,17 @@
-<h1>Accueil</h1>
+<h1>Bienvenue sur ProjetSalle</h1>
 
-<div class="Salle-container">
-    <div class="salle-links">
-        <a href="/Salle">Salle</a>
-    </div>
-    <div class="salle-links">
-        <a href="/">Autre</a>
-    </div>
+<div class="salle-links">
+    <a href="/Salle" class="btn">Voir les Salles</a>
+    <a href="/" class="btn">Explorer</a>
 </div>
+
+<h2>Nos Salles</h2>
 <div class="Salle-container">
     <?php foreach ($salles as $salle): ?>
         <div class="salle">
             <h3><?= $salle->sal_nom ?></h3>
-            <p>Taille : <?= $salle->sal_taille ?> m²</p>
-            <p>Numéro : <?= $salle->sal_numero ?></p>
+            <p><strong>Surface :</strong> <?= $salle->sal_taille ?> m²</p>
+            <p><strong>N° de salle :</strong> <?= $salle->sal_numero ?></p>
         </div>
     <?php endforeach; ?>
 </div>
