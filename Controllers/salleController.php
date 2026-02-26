@@ -12,4 +12,6 @@ if ($uri == "/index.php" || $uri == "/") {
     $title = "Salle";
 }
 
-require_once("Views/base.php");
+if (isset($template)) {
+    require_once("Views/base.php");
+}

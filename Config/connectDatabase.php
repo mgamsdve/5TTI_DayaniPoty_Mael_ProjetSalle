@@ -1,6 +1,6 @@
 <?php
 try {
-    $strConnection = "mysql:host=localhost;dbname=salle;port=3306";
+    $strConnection = "mysql:host=localhost;dbname=sys;port=3306";
 
     $pdo = new PDO(
         $strConnection,

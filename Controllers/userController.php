@@ -3,27 +3,25 @@ $uri = $_SERVER["REQUEST_URI"];
 require_once("Models/userModel.php");
 
 if ($uri == "/inscription") {
-    $erreur = null;
-
     if (isset($_POST["envoyer"])) {
 
-        if (
-            empty($_POST["nom"]) ||
-            empty($_POST["prenom"]) ||
-            empty($_POST["email"]) ||
-            empty($_POST["mdp"])
-        ) {
-            $erreur = "Tous les champs doivent être remplis";
-        } else {
+        $messageError = verifEmptyData();
+
+        if (!$messageError) {
+
             $userExist = selectUserByEmail($pdo, $_POST["email"]);
-            if (!$userExist) {
+
+            if ($userExist === false) {
                 insertUser($pdo);
                 header("location:/connexion");
+                exit;
             } else {
-                $erreur = "Cette adresse email est deja utilisé";
+                $messageError = [];
+                $messageError["email"] = "Cette adresse email est déjà utilisée.";
             }
         }
     }
+
     $title = "Inscription";
     $template = "Views/users/pageInscription.php";
 } elseif ($uri == "/Utilisateur") {
@@ -71,4 +69,24 @@ if ($uri == "/inscription") {
     header("location:/");
     $template = "Views/users/pageProfil.php";
     $title = "Mon Profil";
+}
+
+
+function verifEmptyData()
+{
+    foreach ($_POST as $key => $value) {
+        if (empty(str_replace(' ', '', $value))) {
+            $messageError[$key] = "Votre " . $key . " est vide.";
+        }
+    }
+
+    if (isset($messageError)) {
+        return $messageError;
+    } else {
+        return false;
+    }
+}
+
+if (isset($template)) {
+    require_once("Views/base.php");
 }
