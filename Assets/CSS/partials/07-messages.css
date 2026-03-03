@@ -1,0 +1,23 @@
+.form-error, .form-success {
+  padding: 18px 24px;
+  border-radius: var(--radius-md);
+  margin-bottom: 32px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  animation: revealUp 0.5s var(--ease-out-expo);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-error {
+  background: #fef2f2;
+  color: var(--danger);
+  border: 1px solid #fecaca;
+}
+
+.form-success {
+  background: #f0fdf4;
+  color: var(--success);
+  border: 1px solid #bbf7d0;
+}

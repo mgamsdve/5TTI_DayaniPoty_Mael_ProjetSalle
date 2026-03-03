@@ -20,8 +20,8 @@
         <div id="profile-links">
             <a href="" class="btn-link">Réinitialiser le mot de passe</a>
             <a href="deleteProfil" class="btn-link">Supprimer le compte</a>
+            <a href="/deconnexion" class="btn-link">Se déconnecter</a>
         </div>
-
         <input type="submit" value="Mettre à jour" name="envoyer">
     </form>
 </div>

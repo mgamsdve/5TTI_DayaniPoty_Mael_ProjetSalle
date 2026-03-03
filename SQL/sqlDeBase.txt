@@ -1,0 +1,213 @@
+/* =========================
+   RESET COMPLET DE LA BDD
+========================= */
+
+DROP TABLE IF EXISTS Contenance;
+DROP TABLE IF EXISTS Reservation;
+DROP TABLE IF EXISTS Salle;
+DROP TABLE IF EXISTS Equipement;
+DROP TABLE IF EXISTS Categorie;
+DROP TABLE IF EXISTS Utilisateur;
+
+/* =========================
+   TABLE UTILISATEUR
+========================= */
+
+CREATE TABLE Utilisateur (
+    id_utilisateur INT AUTO_INCREMENT NOT NULL,
+    uti_nom VARCHAR(50) NOT NULL,
+    uti_prenom VARCHAR(50) NOT NULL,
+    uti_email VARCHAR(100) NOT NULL UNIQUE,
+    uti_mdp VARCHAR(255) NOT NULL,
+    uti_role ENUM('utilisateur','admin') DEFAULT 'utilisateur',
+    PRIMARY KEY (id_utilisateur)
+) ENGINE=InnoDB;
+
+/* =========================
+   TABLE CATEGORIE
+========================= */
+
+CREATE TABLE Categorie (
+    id_categorie INT AUTO_INCREMENT NOT NULL,
+    cat_nom VARCHAR(50) NOT NULL,
+    PRIMARY KEY (id_categorie)
+) ENGINE=InnoDB;
+
+/* =========================
+   TABLE SALLE
+========================= */
+
+CREATE TABLE Salle (
+    id_salle INT AUTO_INCREMENT NOT NULL,
+    id_categorie INT NULL,
+    sal_nom VARCHAR(50) NOT NULL,
+    sal_taille INT,
+    sal_numero VARCHAR(20),
+    sal_image VARCHAR(255),
+    PRIMARY KEY (id_salle),
+    CONSTRAINT FK_Salle_Categorie
+        FOREIGN KEY (id_categorie)
+        REFERENCES Categorie(id_categorie)
+        ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+/* =========================
+   TABLE EQUIPEMENT
+========================= */
+
+CREATE TABLE Equipement (
+    id_equipement INT AUTO_INCREMENT NOT NULL,
+    equi_nom VARCHAR(50) NOT NULL,
+    equi_description VARCHAR(200),
+    PRIMARY KEY (id_equipement)
+) ENGINE=InnoDB;
+
+/* =========================
+   TABLE CONTENANCE
+========================= */
+
+CREATE TABLE Contenance (
+    id_contenance INT AUTO_INCREMENT NOT NULL,
+    id_equipement INT NOT NULL,
+    id_salle INT NOT NULL,
+    cont_quantite INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (id_contenance),
+    CONSTRAINT FK_Contenance_Equipement
+        FOREIGN KEY (id_equipement)
+        REFERENCES Equipement(id_equipement)
+        ON DELETE CASCADE,
+    CONSTRAINT FK_Contenance_Salle
+        FOREIGN KEY (id_salle)
+        REFERENCES Salle(id_salle)
+        ON DELETE CASCADE,
+    UNIQUE (id_equipement, id_salle)
+) ENGINE=InnoDB;
+
+/* =========================
+   TABLE RESERVATION
+========================= */
+
+CREATE TABLE Reservation (
+    id_reservation INT AUTO_INCREMENT NOT NULL,
+    id_salle INT NOT NULL,
+    id_utilisateur INT NOT NULL,
+    res_dateDebut DATE NOT NULL,
+    res_dateFin DATE NOT NULL,
+    PRIMARY KEY (id_reservation),
+    CONSTRAINT FK_Reservation_Salle
+        FOREIGN KEY (id_salle)
+        REFERENCES Salle(id_salle)
+        ON DELETE CASCADE,
+    CONSTRAINT FK_Reservation_Utilisateur
+        FOREIGN KEY (id_utilisateur)
+        REFERENCES Utilisateur(id_utilisateur)
+        ON DELETE CASCADE,
+    CONSTRAINT CHK_dates_valides CHECK (res_dateFin >= res_dateDebut),
+    CONSTRAINT CHK_duree_max CHECK (DATEDIFF(res_dateFin, res_dateDebut) <= 5)
+) ENGINE=InnoDB;
+
+/* =========================
+   DONNEES UTILISATEURS (20)
+   Mot de passe = test123
+========================= */
+
+INSERT INTO Utilisateur (uti_nom, uti_prenom, uti_email, uti_mdp, uti_role) VALUES
+('Dupont','Jean','jean@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Martin','Sophie','sophie@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Durand','Lucas','lucas@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Petit','Emma','emma@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Robert','Hugo','hugo@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','admin'),
+('Bernard','Léa','lea@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Moreau','Tom','tom@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Fournier','Inès','ines@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Girard','Noah','noah@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Andre','Chloé','chloe@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','admin'),
+('Lambert','Louis','louis@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Bonnet','Anna','anna@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Francois','Leo','leo@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Michel','Sarah','sarah@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Garcia','Nathan','nathan@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Roux','Julie','julie@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Vincent','Paul','paul@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','admin'),
+('Muller','Laura','laura@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Henry','Lucas','lucas2@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),
+('Leroy','Camille','camille@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur');
+
+/* =========================
+   DONNEES CATEGORIES (10)
+========================= */
+
+INSERT INTO Categorie (cat_nom) VALUES
+('Restaurant'),('Local informatique'),('Salle d’étude'),('Salle de réunion'),('Laboratoire'),
+('Auditorium'),('Salle polyvalente'),('Bibliothèque'),('Studio média'),('Salle de sport');
+
+/* =========================
+   DONNEES SALLES (20)
+========================= */
+
+INSERT INTO Salle (id_categorie, sal_nom, sal_taille, sal_numero, sal_image) VALUES
+(1,'Salle A',120,'A01','salle1.jpg'),
+(2,'Salle B',40,'B02','salle2.jpg'),
+(3,'Salle C',30,'C03','salle3.jpg'),
+(4,'Salle D',60,'D04','salle4.jpg'),
+(5,'Salle E',80,'E05','salle5.jpg'),
+(6,'Salle F',200,'F06','salle6.jpg'),
+(7,'Salle G',150,'G07','salle7.jpg'),
+(8,'Salle H',50,'H08','salle8.jpg'),
+(9,'Salle I',70,'I09','salle9.jpg'),
+(10,'Salle J',300,'J10','salle10.jpg'),
+(1,'Salle K',110,'K11','salle11.jpg'),
+(2,'Salle L',45,'L12','salle12.jpg'),
+(3,'Salle M',35,'M13','salle13.jpg'),
+(4,'Salle N',65,'N14','salle14.jpg'),
+(5,'Salle O',85,'O15','salle15.jpg'),
+(6,'Salle P',210,'P16','salle16.jpg'),
+(7,'Salle Q',160,'Q17','salle17.jpg'),
+(8,'Salle R',55,'R18','salle18.jpg'),
+(9,'Salle S',75,'S19','salle19.jpg'),
+(10,'Salle T',320,'T20','salle20.jpg');
+
+/* =========================
+   DONNEES EQUIPEMENTS (10)
+========================= */
+
+INSERT INTO Equipement (equi_nom, equi_description) VALUES
+('Projecteur','Projecteur HD'),
+('PC','Ordinateur fixe'),
+('Table','Table de travail'),
+('Chaise','Chaise standard'),
+('Tableau','Tableau blanc'),
+('Imprimante','Imprimante réseau'),
+('Climatisation','Système de climatisation'),
+('Micro','Micro sans fil'),
+('Haut-parleurs','Système audio'),
+('Ecran LED','Grand écran LED');
+
+/* =========================
+   DONNEES CONTENANCE
+========================= */
+
+INSERT INTO Contenance (id_equipement, id_salle, cont_quantite) VALUES
+(1,1,1),(2,1,10),(3,2,5),(4,2,20),(5,3,1),
+(6,4,1),(7,5,2),(8,6,4),(9,7,2),(10,8,1),
+(1,9,1),(2,10,15),(3,11,6),(4,12,18),(5,13,1),
+(6,14,1),(7,15,2),(8,16,3),(9,17,2),(10,18,1);
+
+/* =========================
+   DONNEES RESERVATIONS (10)
+========================= */
+
+INSERT INTO Reservation (id_salle, id_utilisateur, res_dateDebut, res_dateFin) VALUES
+(1,1,'2026-02-01','2026-02-03'),
+(2,2,'2026-02-05','2026-02-07'),
+(3,3,'2026-02-10','2026-02-12'),
+(4,4,'2026-02-15','2026-02-18'),
+(5,5,'2026-02-20','2026-02-22'),
+(6,6,'2026-03-01','2026-03-03'),
+(7,7,'2026-03-05','2026-03-07'),
+(8,8,'2026-03-10','2026-03-12'),
+(9,9,'2026-03-15','2026-03-17'),
+(10,10,'2026-03-20','2026-03-22');
+
+
+

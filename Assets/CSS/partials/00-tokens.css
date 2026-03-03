@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap");
+
+:root {
+  /* Core Colors - Clean Blue Theme */
+  --bg-base: #f8fafc;
+  --bg-surface: rgba(255, 255, 255, 0.7);
+  --bg-surface-solid: #ffffff;
+
+  /* Primary Blue Palette */
+  --primary-glow: #3b82f6;
+  --primary-accent: #2563eb;
+  --primary-dark: #1e40af;
+  --primary-light: #eff6ff;
+
+  /* Text Colors */
+  --text-title: #0f172a;
+  --text-main: #334155;
+  --text-muted: #64748b;
+
+  /* Status Colors */
+  --success: #059669;
+  --success-bg: #d1fae5;
+  --danger: #dc2626;
+  --danger-bg: #fee2e2;
+
+  /* Borders & Glass */
+  --glass-border: rgba(15, 23, 42, 0.06);
+  --glass-border-strong: rgba(15, 23, 42, 0.1);
+  --glass-edge: inset 0 1px 0 rgba(255, 255, 255, 1);
+  --glass-blur: blur(24px);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.02), 0 4px 6px rgba(15, 23, 42, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.04), 0 12px 16px -4px rgba(15, 23, 42, 0.04);
+  --shadow-float: 0 20px 40px -10px rgba(15, 23, 42, 0.08), 0 0 20px rgba(59, 130, 246, 0.05);
+  --shadow-glow: 0 10px 25px -5px rgba(37, 99, 235, 0.3);
+  --shadow-inner: inset 0 2px 4px rgba(15, 23, 42, 0.02);
+
+  /* Geometry & Animation */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.2s var(--ease-out-expo);
+  --transition-slow: 0.5s var(--ease-out-expo);
+}

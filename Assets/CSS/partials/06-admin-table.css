@@ -1,0 +1,69 @@
+.admin-table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-solid);
+  border: 1px solid var(--glass-border);
+  margin-top: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+
+.admin-table th {
+  padding: 20px 24px;
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--glass-border-strong);
+  background: #f8fafc;
+}
+
+.admin-table td {
+  padding: 20px 24px;
+  font-weight: 600;
+  color: var(--text-title);
+  border-bottom: 1px solid var(--glass-border);
+  transition: var(--transition-fast);
+}
+
+.admin-table tbody tr:hover td { background: var(--primary-light); }
+.admin-table tbody tr:last-child td { border-bottom: none; }
+
+.role {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.role::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.role.admin {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.role.admin::before { background: var(--danger); box-shadow: 0 0 4px var(--danger); }
+
+.role.utilisateur {
+  background: var(--success-bg);
+  color: var(--success);
+  border: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+.role.utilisateur::before { background: var(--success); box-shadow: 0 0 4px var(--success); }

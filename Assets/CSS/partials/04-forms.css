@@ -1,0 +1,86 @@
+form { max-width: 500px; margin: 0 auto; }
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: var(--transition-fast);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"] {
+  width: 100%;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  background: #f1f5f9;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-title);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: var(--transition-slow);
+  box-shadow: var(--shadow-inner);
+}
+
+input:hover { background: #e2e8f0; }
+
+input:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: var(--primary-glow);
+  box-shadow: 0 0 0 4px var(--primary-light), var(--shadow-sm);
+}
+
+input:focus + label { color: var(--primary-accent); }
+
+input[type="submit"], button, .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 36px;
+  background: linear-gradient(180deg, var(--primary-glow), var(--primary-accent));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: var(--transition-fast);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.4), var(--shadow-md);
+}
+
+input[type="submit"]:hover, button:hover, .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.4), var(--shadow-glow);
+}
+
+input[type="submit"]:active, button:active, .btn:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.2), var(--shadow-sm);
+}
+
+.btn-link {
+  background: transparent;
+  color: var(--danger);
+  box-shadow: none;
+}
+
+.btn-link:hover {
+  background: var(--danger-bg);
+  box-shadow: none;
+  transform: translateY(-2px);
+}
+
+#profile-links { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }

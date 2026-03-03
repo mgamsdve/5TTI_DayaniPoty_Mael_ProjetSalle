@@ -1,0 +1,104 @@
+.Salle-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 28px;
+  margin-top: 48px;
+}
+
+.salle {
+  background: var(--bg-surface-solid);
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  position: relative;
+  text-align: left;
+  transition: var(--transition-slow);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+  z-index: 1;
+}
+
+.salle::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--primary-glow), var(--primary-accent));
+  z-index: -1;
+  opacity: 0;
+  transition: var(--transition-slow);
+}
+
+.salle:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-float);
+  border-color: transparent;
+}
+
+.salle:hover::before {
+  opacity: 1;
+}
+
+.salle h3 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: var(--text-title);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.salle p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.salle:hover p, .salle:hover h3 {
+  color: white;
+}
+
+.salle-links { margin-top: 32px; display: flex; gap: 20px; }
+
+.salle-links a {
+  text-decoration: none;
+  color: var(--primary-accent);
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--primary-light);
+}
+
+.salle-links a:hover {
+  background: var(--primary-accent);
+  color: white;
+}
+
+.salle-icon {
+  font-size: 2.2rem;
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: var(--bg-base);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inner);
+}
+
+.salle-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+  display: block;
+}
