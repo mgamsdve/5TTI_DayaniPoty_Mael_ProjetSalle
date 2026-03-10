@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `sys` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `sys`;
 -- MySQL dump 10.13  Distrib 8.0.45, for macos15 (arm64)
 --
 -- Host: localhost    Database: sys
@@ -579,7 +581,7 @@ CREATE TABLE `Reservation` (
   CONSTRAINT `FK_Reservation_Utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `Utilisateur` (`id_utilisateur`) ON DELETE CASCADE,
   CONSTRAINT `CHK_dates_valides` CHECK ((`res_dateFin` >= `res_dateDebut`)),
   CONSTRAINT `CHK_duree_max` CHECK (((to_days(`res_dateFin`) - to_days(`res_dateDebut`)) <= 5))
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -588,7 +590,7 @@ CREATE TABLE `Reservation` (
 
 LOCK TABLES `Reservation` WRITE;
 /*!40000 ALTER TABLE `Reservation` DISABLE KEYS */;
-INSERT INTO `Reservation` VALUES (1,1,1,'2026-02-01','2026-02-03'),(2,2,2,'2026-02-05','2026-02-07'),(3,3,3,'2026-02-10','2026-02-12'),(4,4,4,'2026-02-15','2026-02-18'),(5,5,5,'2026-02-20','2026-02-22'),(6,6,6,'2026-03-01','2026-03-03'),(7,7,7,'2026-03-05','2026-03-07'),(8,8,8,'2026-03-10','2026-03-12'),(9,9,9,'2026-03-15','2026-03-17'),(10,10,10,'2026-03-20','2026-03-22'),(21,1,29,'2026-04-02','2026-04-04'),(22,4,29,'2026-04-10','2026-04-12'),(23,6,29,'2026-05-03','2026-05-06'),(24,9,29,'2026-05-15','2026-05-17'),(25,10,29,'2026-06-01','2026-06-05'),(26,3,29,'2026-06-18','2026-06-20'),(27,15,29,'2026-09-05','2026-09-08'),(28,18,29,'2026-10-10','2026-10-12'),(29,20,29,'2026-11-01','2026-11-04'),(30,7,29,'2026-12-15','2026-12-18');
+INSERT INTO `Reservation` VALUES (1,1,1,'2026-02-01','2026-02-03'),(2,2,2,'2026-02-05','2026-02-07'),(3,3,3,'2026-02-10','2026-02-12'),(4,4,4,'2026-02-15','2026-02-18'),(5,5,5,'2026-02-20','2026-02-22'),(6,6,6,'2026-03-01','2026-03-03'),(7,7,7,'2026-03-05','2026-03-07'),(8,8,8,'2026-03-10','2026-03-12'),(9,9,9,'2026-03-15','2026-03-17'),(10,10,10,'2026-03-20','2026-03-22'),(21,1,29,'2026-04-02','2026-04-04'),(22,4,29,'2026-04-10','2026-04-12'),(23,6,29,'2026-05-03','2026-05-06'),(24,9,29,'2026-05-15','2026-05-17'),(25,10,29,'2026-06-01','2026-06-05'),(32,20,29,'2026-03-11','2026-03-12'),(36,16,27,'2026-03-01','2026-03-02'),(37,4,27,'2026-03-11','2026-03-12');
 /*!40000 ALTER TABLE `Reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1190,7 +1192,7 @@ CREATE TABLE `Utilisateur` (
   `uti_role` enum('utilisateur','admin') DEFAULT 'utilisateur',
   PRIMARY KEY (`id_utilisateur`),
   UNIQUE KEY `uti_email` (`uti_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1199,7 +1201,7 @@ CREATE TABLE `Utilisateur` (
 
 LOCK TABLES `Utilisateur` WRITE;
 /*!40000 ALTER TABLE `Utilisateur` DISABLE KEYS */;
-INSERT INTO `Utilisateur` VALUES (1,'Dupont','Jean','jean@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(2,'Martin','Sophie','sophie@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(3,'Durand','Lucas','lucas@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(4,'Petit','Emma','emma@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(5,'Robert','Hugo','hugo@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','admin'),(6,'Bernard','Léa','lea@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(7,'Moreau','Tom','tom@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(8,'Fournier','Inès','ines@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(9,'Girard','Noah','noah@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(10,'Andre','Chloé','chloe@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','admin'),(11,'Lambert','Louis','louis@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(12,'Bonnet','Anna','anna@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(13,'Francois','Leo','leo@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(14,'Michel','Sarah','sarah@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(15,'Garcia','Nathan','nathan@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(16,'Roux','Julie','julie@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(17,'Vincent','Paul','paul@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','admin'),(18,'Muller','Laura','laura@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(19,'Henry','Lucas','lucas2@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(20,'Leroy','Camille','camille@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(21,'MAEL','DAYAN','mael.dayani.poty@gmail.com','$2y$12$2e6Xq1x72eWoqBZ.aMkLgOtrHKd9Oh/9CoTRyjpRK2nAsljuYku0u','utilisateur'),(24,'MAEL','DAYANI','mael.dayani.poty2@gmail.com','$2y$12$I9Nin1ANnTZzGnYiaURySeuMn7S5syYwPUgYyIkev7qSJJGEr6VCe','utilisateur'),(25,'Mael','Mael','mael.dayani.pot22y@gmail.com','$2y$12$OOPYe8TRbQdSLFSKq4GiV.p5Bsz4LavVNfdAO04YsYeBITD1iySCC','utilisateur'),(27,'Dayani','Mael','mael.dayani.poty33@gmail.com','$2y$12$ZjS2EoJvLZ6p9Cf/NVorV.3WionWTK4liH8tElDJKT1GzUP1cF4em','utilisateur'),(29,'Admin','Secure','secure@demo.be','$2y$12$ZjS2EoJvLZ6p9Cf/NVorV.3WionWTK4liH8tElDJKT1GzUP1cF4em','admin');
+INSERT INTO `Utilisateur` VALUES (1,'Dupont','Jean','jean@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(2,'Martin','Sophie','sophie@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(3,'Durand','Lucas','lucas@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(4,'Petit','Emma','emma@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(5,'Robert','Hugo','hugo@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','admin'),(6,'Bernard','Léa','lea@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(7,'Moreau','Tom','tom@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(8,'Fournier','Inès','ines@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(9,'Girard','Noah','noah@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(10,'Andre','Chloé','chloe@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','admin'),(11,'Lambert','Louis','louis@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(12,'Bonnet','Anna','anna@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(13,'Francois','Leo','leo@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(14,'Michel','Sarah','sarah@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(15,'Garcia','Nathan','nathan@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(16,'Roux','Julie','julie@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(17,'Vincent','Paul','paul@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','admin'),(18,'Muller','Laura','laura@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(19,'Henry','Lucas','lucas2@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(20,'Leroy','Camille','camille@demo.be','$2y$10$wH8K9QY6G6nEwJYzJYzJY.7QW9QW9QW9QW9QW9QW9QW9QW9QW9QW9QW','utilisateur'),(21,'MAEL','DAYAN','mael.dayani.poty@gmail.com','$2y$12$2e6Xq1x72eWoqBZ.aMkLgOtrHKd9Oh/9CoTRyjpRK2nAsljuYku0u','utilisateur'),(24,'MAEL','DAYANI','mael.dayani.poty2@gmail.com','$2y$12$I9Nin1ANnTZzGnYiaURySeuMn7S5syYwPUgYyIkev7qSJJGEr6VCe','utilisateur'),(25,'Mael','Mael','mael.dayani.pot22y@gmail.com','$2y$12$OOPYe8TRbQdSLFSKq4GiV.p5Bsz4LavVNfdAO04YsYeBITD1iySCC','utilisateur'),(27,'Dayani','Mael','mael.dayani.poty33@gmail.com','$2y$12$ZjS2EoJvLZ6p9Cf/NVorV.3WionWTK4liH8tElDJKT1GzUP1cF4em','utilisateur'),(29,'Admin','Secure','secure@demo.be','$2y$12$ZjS2EoJvLZ6p9Cf/NVorV.3WionWTK4liH8tElDJKT1GzUP1cF4em','admin'),(30,'MAEL','DAYANI','mael.dayani.poty4@gmail.com','$2y$12$RcSvoPPLsjXWsdz7uFu.AeCLf3T6i4WuXi/wouFr894kzaO8bHi0.','utilisateur');
 /*!40000 ALTER TABLE `Utilisateur` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4136,4 +4138,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-03 14:19:45
+-- Dump completed on 2026-03-10 13:59:31
