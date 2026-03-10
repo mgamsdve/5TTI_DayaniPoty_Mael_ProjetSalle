@@ -78,7 +78,7 @@ function selectReservationsBySalleId($pdo, $idSalle)
 function insertReservation($pdo)
 {
     try {
-        $userId = isset($_POST["id_utilisateur"]) ? $_POST["id_utilisateur"] : $_SESSION["user"]->id_utilisateur;
+        $userId = $_SESSION["user"]->id_utilisateur;
         $query = 'INSERT INTO Reservation (id_salle, id_utilisateur, res_dateDebut, res_dateFin)
             VALUES (:idSalle, :idUtilisateur, :dateDebut, :dateFin)';
         $insertReservation = $pdo->prepare($query); //preparer la query
