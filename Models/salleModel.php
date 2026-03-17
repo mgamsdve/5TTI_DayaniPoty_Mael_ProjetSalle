@@ -13,22 +13,6 @@ function selectAllSalle($pdo)
     }
 }
 
-function selectSalleById($pdo, $idSalle)
-{
-    try {
-        $query = 'SELECT * FROM Salle WHERE id_salle = :idSalle';
-        $selectSalle = $pdo->prepare($query); //preparer la query
-        $selectSalle->execute([
-            "idSalle" => $idSalle
-        ]); //executer la query
-        $salle = $selectSalle->fetch(); //recuperer les donnees
-        return $salle;
-    } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
-    }
-}
-
 function selectSallesByCategorieId($pdo, $idCategorie)
 {
     try {

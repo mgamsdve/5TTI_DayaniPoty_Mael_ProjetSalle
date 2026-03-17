@@ -1,19 +1,5 @@
 <?php
 
-function selectAllCategories($pdo)
-{
-    try {
-        $query = 'SELECT * FROM Categorie ORDER BY cat_nom';
-        $selectCategories = $pdo->prepare($query); //preparer la query
-        $selectCategories->execute(); //executer la query
-        $categories = $selectCategories->fetchAll(); //recuperer les donnees
-        return $categories;
-    } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
-    }
-}
-
 function selectCategoryById($pdo, $idCategory)
 {
     try {

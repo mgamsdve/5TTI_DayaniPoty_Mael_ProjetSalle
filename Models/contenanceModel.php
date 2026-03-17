@@ -1,39 +1,5 @@
 <?php
 
-function selectAllContenances($pdo)
-{
-    try {
-        $query = 'SELECT Contenance.*, Salle.sal_nom, Equipement.equi_nom
-            FROM Contenance
-            INNER JOIN Salle ON Salle.id_salle = Contenance.id_salle
-            INNER JOIN Equipement ON Equipement.id_equipement = Contenance.id_equipement
-            ORDER BY Salle.sal_nom, Equipement.equi_nom';
-        $selectContenances = $pdo->prepare($query); //preparer la query
-        $selectContenances->execute(); //executer la query
-        $contenances = $selectContenances->fetchAll(); //recuperer les donnees
-        return $contenances;
-    } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
-    }
-}
-
-function selectContenanceById($pdo, $idContenance)
-{
-    try {
-        $query = 'SELECT * FROM Contenance WHERE id_contenance = :idContenance';
-        $selectContenance = $pdo->prepare($query); //preparer la query
-        $selectContenance->execute([
-            "idContenance" => $idContenance
-        ]); //executer la query
-        $contenance = $selectContenance->fetch(); //recuperer les donnees
-        return $contenance;
-    } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
-    }
-}
-
 function selectContenancesBySalleId($pdo, $idSalle)
 {
     try {

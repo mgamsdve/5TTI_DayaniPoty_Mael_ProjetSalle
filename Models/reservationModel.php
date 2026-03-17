@@ -1,23 +1,5 @@
 <?php
 
-function selectAllReservations($pdo)
-{
-    try {
-        $query = 'SELECT Reservation.*, Salle.sal_nom, Salle.sal_image, Utilisateur.uti_nom, Utilisateur.uti_prenom
-            FROM Reservation
-            INNER JOIN Salle ON Salle.id_salle = Reservation.id_salle
-            INNER JOIN Utilisateur ON Utilisateur.id_utilisateur = Reservation.id_utilisateur
-            ORDER BY Reservation.res_dateDebut DESC';
-        $selectReservations = $pdo->prepare($query); //preparer la query
-        $selectReservations->execute(); //executer la query
-        $reservations = $selectReservations->fetchAll(); //recuperer les donnees
-        return $reservations;
-    } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
-    }
-}
-
 function selectReservationById($pdo, $idReservation)
 {
     try {
