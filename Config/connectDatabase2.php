@@ -4,7 +4,7 @@ try {
 
     $pdo = new PDO(
         $strConnection,
-        "MaelD",
+        "MaelD", 
         "root",
         [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
