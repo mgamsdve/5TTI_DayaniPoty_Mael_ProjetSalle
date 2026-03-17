@@ -98,3 +98,19 @@ function deleteSalle($pdo, $idSalle)
         die($message);
     }
 }
+
+function selectSalleByNumero($pdo, $numeroSalle)
+{
+    try {
+        $query = 'SELECT * FROM Salle WHERE sal_numero = :numeroSalle';
+        $selectSalle = $pdo->prepare($query); //preparer la query
+        $selectSalle->execute([
+            "numeroSalle" => $numeroSalle
+        ]); //executer la query
+        $salle = $selectSalle->fetch(); //recuperer les donnees
+        return $salle;
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}

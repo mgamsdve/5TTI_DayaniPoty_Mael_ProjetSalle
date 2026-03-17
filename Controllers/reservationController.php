@@ -28,9 +28,21 @@ if ($uri == "/create-reservation") {
         } elseif ($_POST["dateDebut"] >= $_POST["dateFin"]) {
             $erreurReservation = "La date de fin doit être après la date de début.";
         } else {
-            insertReservation($pdo);
-            header("location:/Reservation");
-            exit;
+            $dateDebut = DateTime::createFromFormat("Y-m-d", $_POST["dateDebut"]);
+            $dateFin = DateTime::createFromFormat("Y-m-d", $_POST["dateFin"]);
+
+            if (!$dateDebut || !$dateFin) {
+                $erreurReservation = "Format de date invalide.";
+            } else {
+                $dureeReservation = $dateDebut->diff($dateFin)->days;
+                if ($dureeReservation > 5) {
+                    $erreurReservation = "La durée maximale de réservation est de 5 jours.";
+                } else {
+                    insertReservation($pdo);
+                    header("location:/Reservation");
+                    exit;
+                }
+            }
         }
     }
 

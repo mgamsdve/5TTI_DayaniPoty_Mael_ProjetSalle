@@ -9,7 +9,8 @@
 <div class="Salle-container">
     <?php foreach ($salles as $salle): ?>
         <div class="salle">
-            <img src="<?= $salle->sal_image ?>" alt="Image de <?= $salle->sal_nom ?>" class="salle-image">
+            <a href="/Salle/Details/<?= $salle->sal_numero ?>"> <img src="<?= htmlspecialchars($salle->sal_image) ?>" alt="Image de <?= htmlspecialchars($salle->sal_nom) ?>" class="salle-image">
+            </a>
             <h3><?= $salle->sal_nom ?></h3>
             <p><strong>Surface :</strong> <?= $salle->sal_taille ?> m²</p>
             <p><strong>N° de salle :</strong> <?= $salle->sal_numero ?></p>

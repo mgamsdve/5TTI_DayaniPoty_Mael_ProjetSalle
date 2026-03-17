@@ -12,15 +12,16 @@
     <div class="Salle-container">
         <?php foreach ($reservations as $reservation): ?>
             <div class="salle">
-                <img src="<?= htmlspecialchars($reservation->sal_image) ?>" alt="Image de <?= htmlspecialchars($reservation->sal_nom) ?>" class="salle-image">
+                <a href="/Salle/Details/<?= $reservation->sal_numero ?>"> <img src="<?= htmlspecialchars($reservation->sal_image) ?>" alt="Image de <?= htmlspecialchars($reservation->sal_nom) ?>" class="salle-image">
+                </a>
                 <h3><?= htmlspecialchars($reservation->sal_nom) ?></h3>
                 <p><strong>Date de début :</strong> <?= htmlspecialchars($reservation->res_dateDebut) ?></p>
                 <p><strong>Date de fin :</strong> <?= htmlspecialchars($reservation->res_dateFin) ?></p>
                 <p><strong>Réservation # :</strong> <?= $reservation->id_reservation ?></p>
                 <div class="salle-link">
                     <a href="/delete-reservation?id=<?= $reservation->id_reservation ?>"
-                       class="btn-delete"
-                       onclick="return confirm('Confirmer la suppression de cette réservation ?')">
+                        class="btn-delete"
+                        onclick="return confirm('Confirmer la suppression de cette réservation ?')">
                         <span class="btn-delete-icon">🗑</span>
                         Supprimer
                     </a>
@@ -29,4 +30,3 @@
         <?php endforeach; ?>
     </div>
 <?php endif; ?>
-

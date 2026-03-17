@@ -37,7 +37,7 @@ function selectReservationById($pdo, $idReservation)
 function selectReservationsByUserId($pdo, $idUtilisateur)
 {
     try {
-        $query = 'SELECT Reservation.*, Salle.sal_nom, Salle.sal_image
+        $query = 'SELECT Reservation.*, Salle.sal_nom, Salle.sal_image, Salle.sal_numero
             FROM Reservation
             INNER JOIN Salle ON Salle.id_salle = Reservation.id_salle
             WHERE Reservation.id_utilisateur = :idUtilisateur
