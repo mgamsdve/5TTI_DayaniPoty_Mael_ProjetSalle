@@ -1,1 +1,1 @@
-<p>&copy; <?= date("Y") ?> - Mael DP </p>
+<p>&copy; <?= date("Y") ?> RoomBook &mdash; Réservation de salles</p>

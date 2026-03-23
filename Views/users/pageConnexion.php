@@ -14,4 +14,7 @@
         </div>
         <input type="submit" value="Se connecter" id="envoyer" name="envoyer">
     </form>
+    <p class="auth-footer">
+        Pas encore de compte ? <a href="/inscription">S'inscrire</a>
+    </p>
 </div>

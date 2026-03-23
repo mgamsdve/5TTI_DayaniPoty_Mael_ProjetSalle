@@ -1,48 +1,58 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap");
-
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+   ═══════════════════════════════════════════ */
 :root {
-  /* Core Colors - Clean Blue Theme */
-  --bg-base: #f8fafc;
-  --bg-surface: rgba(255, 255, 255, 0.7);
-  --bg-surface-solid: #ffffff;
+  /* Primary */
+  --primary:        #6C47FF;
+  --primary-dark:   #5035CC;
+  --primary-light:  #EEE9FF;
+  --primary-hover:  rgba(108, 71, 255, 0.08);
 
-  /* Primary Blue Palette */
-  --primary-glow: #3b82f6;
-  --primary-accent: #2563eb;
-  --primary-dark: #1e40af;
-  --primary-light: #eff6ff;
+  /* Text */
+  --text-primary:   #1A1A2E;
+  --text-secondary: #6B7280;
+  --text-muted:     #9CA3AF;
 
-  /* Text Colors */
-  --text-title: #0f172a;
-  --text-main: #334155;
-  --text-muted: #64748b;
+  /* Backgrounds */
+  --bg-main:        #F7F7F8;
+  --bg-white:       #FFFFFF;
+  --bg-hover:       #F3F4F6;
 
-  /* Status Colors */
-  --success: #059669;
-  --success-bg: #d1fae5;
-  --danger: #dc2626;
-  --danger-bg: #fee2e2;
+  /* Borders */
+  --border:         #E5E7EB;
+  --border-strong:  #D1D5DB;
 
-  /* Borders & Glass */
-  --glass-border: rgba(15, 23, 42, 0.06);
-  --glass-border-strong: rgba(15, 23, 42, 0.1);
-  --glass-edge: inset 0 1px 0 rgba(255, 255, 255, 1);
-  --glass-blur: blur(24px);
+  /* Semantic */
+  --danger:         #EF4444;
+  --danger-light:   #FEF2F2;
+  --danger-dark:    #DC2626;
+  --success:        #10B981;
+  --success-light:  #ECFDF5;
+  --warning:        #F59E0B;
+  --warning-light:  #FFFBEB;
+
+  /* Radius */
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-pill: 9999px;
 
   /* Shadows */
-  --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.02), 0 4px 6px rgba(15, 23, 42, 0.02);
-  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.04), 0 12px 16px -4px rgba(15, 23, 42, 0.04);
-  --shadow-float: 0 20px 40px -10px rgba(15, 23, 42, 0.08), 0 0 20px rgba(59, 130, 246, 0.05);
-  --shadow-glow: 0 10px 25px -5px rgba(37, 99, 235, 0.3);
-  --shadow-inner: inset 0 2px 4px rgba(15, 23, 42, 0.02);
+  --shadow-sm:   0 1px 4px rgba(0,0,0,0.06);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg:   0 8px 32px rgba(0,0,0,0.12);
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.07);
 
-  /* Geometry & Animation */
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-pill: 999px;
+  /* Typography */
+  --font: 'Inter', system-ui, sans-serif;
 
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-fast: 0.2s var(--ease-out-expo);
-  --transition-slow: 0.5s var(--ease-out-expo);
+  /* Motion */
+  --ease:       cubic-bezier(0.2, 0, 0, 1);
+  --transition: 0.2s cubic-bezier(0.2, 0, 0, 1);
+
+  /* Admin */
+  --sidebar-width: 240px;
+  --sidebar-bg:    #1A1A2E;
 }

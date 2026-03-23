@@ -1,51 +1,87 @@
 <?php if (!$salle): ?>
-    <h1>Salle introuvable</h1>
-    <p>La salle demandee n'existe pas.</p>
-    <a href="/Salle" class="btn-link">Retour a la liste des salles</a>
-<?php else: ?>
-    <h1><?= htmlspecialchars($salle->sal_nom) ?></h1>
-
-    <div class="salle">
-        <img src="<?= htmlspecialchars($salle->sal_image) ?>" alt="Image de <?= htmlspecialchars($salle->sal_nom) ?>" class="salle-image">
-        <p><strong>Numero :</strong> <?= htmlspecialchars($salle->sal_numero) ?></p>
-        <p><strong>Surface :</strong> <?= htmlspecialchars($salle->sal_taille) ?> m2</p>
-        <?php if ($categorieSalle): ?>
-            <p><strong>Categorie :</strong> <?= htmlspecialchars($categorieSalle->cat_nom) ?></p>
-        <?php endif; ?>
+    <div style="text-align:center; padding: 60px 0;">
+        <h1>Salle introuvable</h1>
+        <p style="margin-bottom:24px;">La salle demandée n'existe pas.</p>
+        <a href="/Salle" class="btn">Retour aux salles</a>
     </div>
+<?php else: ?>
+    <div class="details-layout">
+        <div class="details-main">
+            <h1><?= htmlspecialchars($salle->sal_nom) ?></h1>
 
-    <h2>Equipements de la salle</h2>
-    <?php if (empty($equipementsSalle)): ?>
-        <p>Aucun equipement pour cette salle.</p>
-    <?php else: ?>
-        <div class="Salle-container">
-            <?php foreach ($equipementsSalle as $equipementSalle): ?>
-                <div class="salle">
-                    <h3><?= htmlspecialchars($equipementSalle->equi_nom) ?></h3>
-                    <p><?= htmlspecialchars($equipementSalle->equi_description) ?></p>
-                    <p><strong>Quantite :</strong> <?= htmlspecialchars($equipementSalle->cont_quantite) ?></p>
+            <?php if ($categorieSalle): ?>
+                <span class="badge" style="margin-bottom: 20px; display:inline-block;">
+                    <?= htmlspecialchars($categorieSalle->cat_nom) ?>
+                </span>
+            <?php endif; ?>
+
+            <img src="<?= htmlspecialchars($salle->sal_image) ?>"
+                 alt="Image de <?= htmlspecialchars($salle->sal_nom) ?>"
+                 class="salle-image"
+                 style="height: 280px; margin-bottom: 20px;">
+
+            <div class="details-info-row">
+                <p><strong>Référence :</strong> <?= htmlspecialchars($salle->sal_numero) ?></p>
+                <p><strong>Surface :</strong> <?= htmlspecialchars($salle->sal_taille) ?> m²</p>
+                <?php if ($categorieSalle): ?>
+                    <p><strong>Catégorie :</strong> <?= htmlspecialchars($categorieSalle->cat_nom) ?></p>
+                <?php endif; ?>
+            </div>
+
+            <h2>Équipements</h2>
+            <?php if (empty($equipementsSalle)): ?>
+                <p style="margin-bottom: 24px;">Aucun équipement pour cette salle.</p>
+            <?php else: ?>
+                <div class="equipment-pills" style="margin-bottom: 24px;">
+                    <?php foreach ($equipementsSalle as $equipementSalle): ?>
+                        <div class="equipment-pill">
+                            <i data-lucide="monitor" style="width:14px;height:14px;"></i>
+                            <?= htmlspecialchars($equipementSalle->equi_nom) ?>
+                            <span style="color:var(--text-muted); font-size:0.8rem;">
+                                × <?= htmlspecialchars($equipementSalle->cont_quantite) ?>
+                            </span>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
+            <?php endif; ?>
 
-    <h2>Reservations</h2>
-    <?php if (empty($reservationsSalle)): ?>
-        <p>Aucune reservation pour cette salle.</p>
-    <?php else: ?>
-        <div class="Salle-container">
-            <?php foreach ($reservationsSalle as $reservationSalle): ?>
-                <div class="salle">
-                    <p><strong>Debut :</strong> <?= htmlspecialchars($reservationSalle->res_dateDebut) ?></p>
-                    <p><strong>Fin :</strong> <?= htmlspecialchars($reservationSalle->res_dateFin) ?></p>
-                    <p><strong>Reservee par :</strong> <?= htmlspecialchars($reservationSalle->uti_prenom . " " . $reservationSalle->uti_nom) ?></p>
+            <h2>Réservations existantes</h2>
+            <?php if (empty($reservationsSalle)): ?>
+                <p>Aucune réservation pour cette salle.</p>
+            <?php else: ?>
+                <div class="reservation-list">
+                    <?php foreach ($reservationsSalle as $reservationSalle): ?>
+                        <div class="reservation-item">
+                            <i data-lucide="calendar" style="width:16px;height:16px;color:var(--primary);flex-shrink:0;"></i>
+                            <div>
+                                <strong><?= htmlspecialchars($reservationSalle->uti_prenom . " " . $reservationSalle->uti_nom) ?></strong>
+                                &mdash;
+                                Du <?= htmlspecialchars($reservationSalle->res_dateDebut) ?>
+                                au <?= htmlspecialchars($reservationSalle->res_dateFin) ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
+            <?php endif; ?>
 
-    <div class="salle-link">
-        <a href="/Salle" class="btn-link">Retour aux salles</a>
+            <div class="salle-link" style="margin-top: 32px;">
+                <a href="/Salle">← Retour aux salles</a>
+            </div>
+        </div>
+
+        <div>
+            <div class="booking-panel">
+                <h3>Réserver cette salle</h3>
+                <p><strong>Référence :</strong> <?= htmlspecialchars($salle->sal_numero) ?></p>
+                <p><strong>Surface :</strong> <?= htmlspecialchars($salle->sal_taille) ?> m²</p>
+                <?php if ($categorieSalle): ?>
+                    <p><strong>Catégorie :</strong> <?= htmlspecialchars($categorieSalle->cat_nom) ?></p>
+                <?php endif; ?>
+                <a href="/create-reservation" class="btn">
+                    <i data-lucide="calendar-plus"></i>
+                    Réserver maintenant
+                </a>
+            </div>
+        </div>
     </div>
 <?php endif; ?>
-

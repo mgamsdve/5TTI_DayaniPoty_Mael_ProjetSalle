@@ -1,5 +1,23 @@
 <?php
 
+function selectAllContenances($pdo)
+{
+    try {
+        $query = 'SELECT Contenance.*, Equipement.equi_nom, Salle.sal_nom, Salle.sal_numero
+            FROM Contenance
+            INNER JOIN Equipement ON Equipement.id_equipement = Contenance.id_equipement
+            INNER JOIN Salle ON Salle.id_salle = Contenance.id_salle
+            ORDER BY Salle.sal_nom, Equipement.equi_nom';
+        $selectContenances = $pdo->prepare($query);
+        $selectContenances->execute();
+        $contenances = $selectContenances->fetchAll();
+        return $contenances;
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}
+
 function selectContenancesBySalleId($pdo, $idSalle)
 {
     try {

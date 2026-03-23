@@ -1,5 +1,23 @@
 <?php
 
+function selectAllReservations($pdo)
+{
+    try {
+        $query = 'SELECT Reservation.*, Salle.sal_nom, Salle.sal_numero, Utilisateur.uti_nom, Utilisateur.uti_prenom
+            FROM Reservation
+            INNER JOIN Salle ON Salle.id_salle = Reservation.id_salle
+            INNER JOIN Utilisateur ON Utilisateur.id_utilisateur = Reservation.id_utilisateur
+            ORDER BY Reservation.res_dateDebut DESC';
+        $selectReservations = $pdo->prepare($query);
+        $selectReservations->execute();
+        $reservations = $selectReservations->fetchAll();
+        return $reservations;
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}
+
 function selectReservationById($pdo, $idReservation)
 {
     try {
@@ -89,6 +107,44 @@ function updateReservation($pdo, $idReservation)
             "dateFin" => $_POST["dateFin"],
             "idReservation" => $idReservation
         ]); //executer la query
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}
+
+function insertReservationAdmin($pdo)
+{
+    try {
+        $query = 'INSERT INTO Reservation (id_salle, id_utilisateur, res_dateDebut, res_dateFin)
+            VALUES (:idSalle, :idUtilisateur, :dateDebut, :dateFin)';
+        $insertReservation = $pdo->prepare($query);
+        $insertReservation->execute([
+            "idSalle" => $_POST["id_salle"],
+            "idUtilisateur" => $_POST["id_utilisateur"],
+            "dateDebut" => $_POST["dateDebut"],
+            "dateFin" => $_POST["dateFin"]
+        ]);
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}
+
+function updateReservationAdmin($pdo, $idReservation)
+{
+    try {
+        $query = 'UPDATE Reservation
+            SET id_salle = :idSalle, id_utilisateur = :idUtilisateur, res_dateDebut = :dateDebut, res_dateFin = :dateFin
+            WHERE id_reservation = :idReservation';
+        $updateReservation = $pdo->prepare($query);
+        $updateReservation->execute([
+            "idSalle" => $_POST["id_salle"],
+            "idUtilisateur" => $_POST["id_utilisateur"],
+            "dateDebut" => $_POST["dateDebut"],
+            "dateFin" => $_POST["dateFin"],
+            "idReservation" => $idReservation
+        ]);
     } catch (PDOException $e) {
         $message = $e->getMessage();
         die($message);

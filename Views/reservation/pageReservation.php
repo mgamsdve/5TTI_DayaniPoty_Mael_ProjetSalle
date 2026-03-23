@@ -1,29 +1,44 @@
 <div class="page-header">
     <h1>Mes Réservations</h1>
-    <a href="/create-reservation" class="btn">+ Nouvelle réservation</a>
+    <a href="/create-reservation" class="btn">
+        <i data-lucide="plus"></i>
+        Nouvelle réservation
+    </a>
 </div>
 
-<!-- Liste des réservations existantes -->
-<h2>Mes réservations en cours</h2>
-
 <?php if (empty($reservations)) : ?>
-    <p>Vous n'avez aucune réservation pour le moment.</p>
+    <div style="text-align:center; padding: 60px 0; color: var(--text-secondary);">
+        <i data-lucide="calendar-x" style="width:48px;height:48px;margin:0 auto 16px;display:block;color:var(--text-muted);"></i>
+        <p style="font-size:1rem; margin-bottom:20px;">Vous n'avez aucune réservation pour le moment.</p>
+        <a href="/Salle" class="btn">Voir les salles disponibles</a>
+    </div>
 <?php else : ?>
     <div class="Salle-container">
         <?php foreach ($reservations as $reservation): ?>
             <div class="salle">
-                <a href="/Salle/Details/<?= $reservation->sal_numero ?>"> <img src="<?= htmlspecialchars($reservation->sal_image) ?>" alt="Image de <?= htmlspecialchars($reservation->sal_nom) ?>" class="salle-image">
+                <a href="/Salle/Details/<?= $reservation->sal_numero ?>">
+                    <img src="<?= htmlspecialchars($reservation->sal_image) ?>"
+                         alt="Image de <?= htmlspecialchars($reservation->sal_nom) ?>"
+                         class="salle-image">
                 </a>
                 <h3><?= htmlspecialchars($reservation->sal_nom) ?></h3>
-                <p><strong>Date de début :</strong> <?= htmlspecialchars($reservation->res_dateDebut) ?></p>
-                <p><strong>Date de fin :</strong> <?= htmlspecialchars($reservation->res_dateFin) ?></p>
-                <p><strong>Réservation # :</strong> <?= $reservation->id_reservation ?></p>
+                <p>
+                    <i data-lucide="calendar" style="width:13px;height:13px;display:inline;vertical-align:middle;"></i>
+                    <strong>Début :</strong> <?= htmlspecialchars($reservation->res_dateDebut) ?>
+                </p>
+                <p>
+                    <i data-lucide="calendar-check" style="width:13px;height:13px;display:inline;vertical-align:middle;"></i>
+                    <strong>Fin :</strong> <?= htmlspecialchars($reservation->res_dateFin) ?>
+                </p>
+                <p style="color:var(--text-muted); font-size:0.8rem;">
+                    Réservation #<?= $reservation->id_reservation ?>
+                </p>
                 <div class="salle-link">
                     <a href="/delete-reservation?id=<?= $reservation->id_reservation ?>"
-                        class="btn-delete"
-                        onclick="return confirm('Confirmer la suppression de cette réservation ?')">
-                        <span class="btn-delete-icon">🗑</span>
-                        Supprimer
+                       class="btn-delete"
+                       onclick="return confirm('Confirmer la suppression de cette réservation ?')">
+                        <i data-lucide="trash-2" style="width:13px;height:13px;"></i>
+                        Annuler
                     </a>
                 </div>
             </div>
