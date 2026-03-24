@@ -249,6 +249,20 @@ Concrètement, on enregistre dans une même ligne :
 - l'ID de la deuxième table (`id_utilisateur` ou `id_equipement`)
 - puis les données métier (dates, quantité, etc.)
 
+Extrait SQL (structure logique d'une table de liaison) :
+
+```sql
+CREATE TABLE Reservation (
+    id_reservation INT PRIMARY KEY AUTO_INCREMENT,
+    id_salle INT NOT NULL,
+    id_utilisateur INT NOT NULL,
+    res_dateDebut DATE NOT NULL,
+    res_dateFin DATE NOT NULL,
+    FOREIGN KEY (id_salle) REFERENCES Salle(id_salle),
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
+);
+```
+
 ---
 
 ### 10.1 Comment se passe l'`INSERT` avec 2 IDs
@@ -263,6 +277,17 @@ $query = 'INSERT INTO Reservation (id_salle, id_utilisateur, res_dateDebut, res_
           VALUES (:idSalle, :idUtilisateur, :dateDebut, :dateFin)';
 ```
 
+Extrait du modèle (liaison des valeurs au moment de l'insert) :
+
+```php
+$insertReservation->execute([
+    "idSalle" => $_POST["id_salle"],
+    "idUtilisateur" => $_SESSION["user"]->id_utilisateur,
+    "dateDebut" => $_POST["dateDebut"],
+    "dateFin" => $_POST["dateFin"]
+]);
+```
+
 Cas `Contenance` :
 - L'admin choisit une salle (`id_salle`)
 - L'admin choisit un équipement (`id_equipement`)
@@ -271,6 +296,22 @@ Cas `Contenance` :
 ```php
 $query = 'INSERT INTO Contenance (id_equipement, id_salle, cont_quantite)
           VALUES (:idEquipement, :idSalle, :quantite)';
+```
+
+Extrait vue admin (2 listes déroulantes pour sélectionner les 2 IDs) :
+
+```php
+<select name="id_salle" id="contenance_salle">
+    <?php foreach ($salles as $salle) : ?>
+        <option value="<?= $salle->id_salle ?>"><?= $salle->sal_nom ?></option>
+    <?php endforeach ?>
+</select>
+
+<select name="id_equipement" id="contenance_equipement">
+    <?php foreach ($equipements as $equipement) : ?>
+        <option value="<?= $equipement->id_equipement ?>"><?= $equipement->equi_nom ?></option>
+    <?php endforeach ?>
+</select>
 ```
 
 ---
@@ -293,12 +334,30 @@ INNER JOIN Salle ON Salle.id_salle = Reservation.id_salle
 INNER JOIN Utilisateur ON Utilisateur.id_utilisateur = Reservation.id_utilisateur
 ```
 
+Extrait équivalent pour les contenances :
+
+```sql
+SELECT Contenance.*, Equipement.equi_nom, Salle.sal_nom, Salle.sal_numero
+FROM Contenance
+INNER JOIN Equipement ON Equipement.id_equipement = Contenance.id_equipement
+INNER JOIN Salle ON Salle.id_salle = Contenance.id_salle
+ORDER BY Salle.sal_nom, Equipement.equi_nom;
+```
+
 Même logique pour `Contenance` :
 - on joint `Contenance` + `Salle` + `Equipement`
 
 Idée clé à retenir :
 - les IDs servent au lien technique en base
 - les `JOIN` servent à afficher des données lisibles dans l'interface
+
+Extrait contrôleur (chargement des données nécessaires à l'affichage) :
+
+```php
+$salles = selectAllSalle($pdo);
+$equipements = selectAllEquipements($pdo);
+$contenances = selectAllContenances($pdo);
+```
 
 ---
 
@@ -316,6 +375,14 @@ session_start();
 
 Sans ça, `$_SESSION` n'existe pas.
 
+Extrait réel du point d'entrée :
+
+```php
+session_start();
+require_once("Config/connectDatabase.php");
+require_once("Controllers/userController.php");
+```
+
 ---
 
 ### 11.2 Connexion (login)
@@ -324,6 +391,17 @@ Après vérification email + mot de passe, on stocke l'utilisateur en session :
 
 ```php
 $_SESSION["user"] = $user;
+```
+
+Extrait type (contrôleur de connexion) :
+
+```php
+$user = selectUserByEmailAndPassword($pdo);
+if ($user) {
+    $_SESSION["user"] = $user;
+    header("location:/");
+    exit;
+}
 ```
 
 Ensuite, toutes les pages peuvent savoir :
@@ -340,6 +418,27 @@ Exemples courants :
 - récupérer son ID pour créer une réservation personnelle
 - afficher son prénom dans la navbar
 
+Extrait (protéger une page réservée) :
+
+```php
+if (!isset($_SESSION["user"])) {
+    header("location:/connexion");
+    exit;
+}
+```
+
+Extrait (lier une réservation à l'utilisateur connecté) :
+
+```php
+$userId = $_SESSION["user"]->id_utilisateur;
+```
+
+Extrait (affichage dans la navbar) :
+
+```php
+<span><?= htmlspecialchars($_SESSION["user"]->uti_prenom) ?></span>
+```
+
 ---
 
 ### 11.4 Mise à jour et suppression de session
@@ -349,6 +448,14 @@ Exemples courants :
 
 ```php
 session_destroy();
+```
+
+Extrait (mise à jour de session après modification du profil) :
+
+```php
+updateUser($pdo);
+updateSession($pdo);
+header("location:/Profil");
 ```
 
 ---
@@ -369,6 +476,22 @@ Si une condition échoue : redirection.
 
 Ce contrôle protège les pages même si quelqu'un tape l'URL manuellement.
 
+Extrait réel (contrôle admin côté serveur) :
+
+```php
+if (strpos($uri, "/admin") === 0) {
+    if (!isset($_SESSION["user"])) {
+        header("location:/connexion");
+        exit;
+    }
+
+    if ($_SESSION["user"]->uti_role != "admin") {
+        header("location:/");
+        exit;
+    }
+}
+```
+
 ---
 
 ### 12.2 Navbar qui change selon l'état utilisateur
@@ -387,6 +510,29 @@ Si l'utilisateur connecté est admin :
 - menu déroulant `Admin`
 - accès vers dashboard et pages de gestion (`users`, `categories`, `salles`, `equipements`, `contenances`, `reservations`)
 
+Extrait navbar (partie invité) :
+
+```php
+<?php if (isset($_SESSION["user"])) : ?>
+    <!-- contenu utilisateur connecté -->
+<?php else : ?>
+    <a href="/connexion" class="btn-outline-sm">Connexion</a>
+    <a href="/inscription" class="btn-sm">Inscription</a>
+<?php endif ?>
+```
+
+Extrait navbar (partie admin) :
+
+```php
+<?php if ($_SESSION["user"]->uti_role == "admin") : ?>
+    <div class="navbar-dropdown-menu">
+        <a href="/admin">Dashboard</a>
+        <a href="/admin/contenances">Contenances</a>
+        <a href="/admin/reservations">Réservations</a>
+    </div>
+<?php endif ?>
+```
+
 ---
 
 ### 12.3 Pourquoi c'est important
@@ -394,5 +540,12 @@ Si l'utilisateur connecté est admin :
 - L'interface (navbar) guide l'utilisateur selon son rôle
 - Les contrôleurs appliquent la vraie sécurité côté serveur
 - Les deux ensemble donnent une application claire et sécurisée
+
+Extrait récapitulatif (bonne pratique) :
+
+```php
+// Vue : masquer/afficher des liens selon la session
+// Contrôleur : toujours revérifier les droits avant traitement
+```
 
 ---
