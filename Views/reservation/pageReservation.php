@@ -34,9 +34,13 @@
                     Réservation #<?= $reservation->id_reservation ?>
                 </p>
                 <div class="salle-link">
-                    <a href="/delete-reservation?id=<?= $reservation->id_reservation ?>"
+                    <form method="POST" action="/delete-reservation" id="delete-reservation-<?= $reservation->id_reservation ?>">
+                        <input type="hidden" name="action" value="deleteReservation">
+                        <input type="hidden" name="id_reservation" value="<?= $reservation->id_reservation ?>">
+                    </form>
+                    <a href="#"
                        class="btn-delete"
-                       onclick="return confirm('Confirmer la suppression de cette réservation ?')">
+                       onclick="if (confirm('Confirmer la suppression de cette réservation ?')) { document.getElementById('delete-reservation-<?= $reservation->id_reservation ?>').submit(); } return false;">
                         <i data-lucide="trash-2" style="width:13px;height:13px;"></i>
                         Annuler
                     </a>

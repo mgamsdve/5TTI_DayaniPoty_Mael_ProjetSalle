@@ -6,6 +6,7 @@
     <?php endif; ?>
 
     <form action="/create-reservation" method="POST">
+        <input type="hidden" name="action" value="createReservation">
         <div class="form-group">
             <label for="id_salle">Salle</label>
             <select name="id_salle" id="id_salle" required>
@@ -32,7 +33,7 @@
         </div>
 
         <div class="form-actions">
-            <input type="submit" name="creerReservation" value="Créer la réservation">
+            <input type="submit" value="Créer la réservation">
             <a href="/Reservation" class="btn btn-secondary">Annuler</a>
         </div>
     </form>

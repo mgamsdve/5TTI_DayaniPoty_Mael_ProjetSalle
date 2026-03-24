@@ -22,7 +22,7 @@ if ($uri == "/create-reservation") {
 
     $erreurReservation = null;
 
-    if (isset($_POST["creerReservation"])) {
+    if (isset($_POST["action"]) && $_POST["action"] == "createReservation") {
         if (empty($_POST["id_salle"]) || empty($_POST["dateDebut"]) || empty($_POST["dateFin"])) {
             $erreurReservation = "Tous les champs sont obligatoires.";
         } elseif ($_POST["dateDebut"] >= $_POST["dateFin"]) {
@@ -58,11 +58,22 @@ if ($uri == "/delete-reservation") {
         exit;
     }
 
-    $idReservation = $_GET["id"];
-    $reservation = selectReservationById($pdo, $idReservation);
-    if ($reservation && $reservation->id_utilisateur == $_SESSION["user"]->id_utilisateur) {
-        deleteReservation($pdo, $idReservation);
+    $idReservation = null;
+
+    if (isset($_POST["action"]) && $_POST["action"] == "deleteReservation" && !empty($_POST["id_reservation"])) {
+        $idReservation = $_POST["id_reservation"];
+    } elseif (!empty($_GET["id"])) {
+        // Fallback temporaire pour conserver la compatibilite avec les anciens liens.
+        $idReservation = $_GET["id"];
     }
+
+    if (!empty($idReservation)) {
+        $reservation = selectReservationById($pdo, $idReservation);
+        if ($reservation && $reservation->id_utilisateur == $_SESSION["user"]->id_utilisateur) {
+            deleteReservation($pdo, $idReservation);
+        }
+    }
+
     header("location:/Reservation");
     exit;
 }
