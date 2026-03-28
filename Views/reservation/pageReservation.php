@@ -13,9 +13,22 @@
         <a href="/Salle" class="btn">Voir les salles disponibles</a>
     </div>
 <?php else : ?>
+    <div class="list-search" role="search">
+        <label for="reservation-search-input">Rechercher une réservation</label>
+        <input
+            type="text"
+            id="reservation-search-input"
+            placeholder="Salle, référence, date ou numéro..."
+            autocomplete="off"
+        >
+    </div>
+
     <div class="Salle-container">
         <?php foreach ($reservations as $reservation): ?>
-            <div class="salle">
+            <div
+                class="salle"
+                data-search="<?= htmlspecialchars(strtolower($reservation->sal_nom . ' ' . $reservation->sal_numero . ' ' . $reservation->res_dateDebut . ' ' . $reservation->res_dateFin . ' ' . $reservation->id_reservation), ENT_QUOTES, 'UTF-8') ?>"
+            >
                 <a href="/Salle/Details/<?= $reservation->sal_numero ?>">
                     <img src="<?= htmlspecialchars($reservation->sal_image) ?>"
                          alt="Image de <?= htmlspecialchars($reservation->sal_nom) ?>"
@@ -48,4 +61,14 @@
             </div>
         <?php endforeach; ?>
     </div>
+
+    <p id="reservation-no-results" class="list-no-results" hidden>Aucune réservation ne correspond à votre recherche.</p>
+
+    <script>
+        initSearchFilter({
+            inputSelector: "#reservation-search-input",
+            itemSelector: ".Salle-container .salle",
+            emptySelector: "#reservation-no-results"
+        });
+    </script>
 <?php endif; ?>

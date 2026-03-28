@@ -20,6 +20,16 @@
                 <input type="submit" value="Ajouter un équipement">
             </form>
 
+            <div class="admin-search" role="search">
+                <label for="admin-equipements-search-input">Rechercher un équipement</label>
+                <input
+                    type="text"
+                    id="admin-equipements-search-input"
+                    placeholder="Nom, description ou ID..."
+                    autocomplete="off"
+                >
+            </div>
+
             <div class="admin-table-wrapper">
                 <table class="admin-table">
                     <thead>
@@ -33,7 +43,7 @@
                     </thead>
                     <tbody>
                         <?php foreach ($equipements as $equipement) : ?>
-                            <tr>
+                            <tr data-search="<?= htmlspecialchars(strtolower($equipement->id_equipement . ' ' . $equipement->equi_nom . ' ' . $equipement->equi_description), ENT_QUOTES, 'UTF-8') ?>">
                                 <td><?= $equipement->id_equipement ?></td>
                                 <td><input type="text" name="nom" value="<?= $equipement->equi_nom ?>" form="equipement-form-<?= $equipement->id_equipement ?>" required></td>
                                 <td><input type="text" name="description" value="<?= $equipement->equi_description ?>" form="equipement-form-<?= $equipement->id_equipement ?>" required></td>
@@ -56,6 +66,17 @@
                     </tbody>
                 </table>
             </div>
+
+            <p id="admin-equipements-no-results" class="admin-no-results" hidden>Aucun équipement ne correspond à votre recherche.</p>
         </section>
     </div>
 </div>
+
+<script>
+    initSearchFilter({
+        inputSelector: "#admin-equipements-search-input",
+        itemSelector: ".admin-table tbody tr",
+        emptySelector: "#admin-equipements-no-results",
+        visibleDisplay: "table-row"
+    });
+</script>

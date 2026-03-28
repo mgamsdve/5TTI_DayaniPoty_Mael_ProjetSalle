@@ -16,6 +16,24 @@
   margin-bottom: 0;
 }
 
+.salle-search,
+.list-search {
+  margin-bottom: 20px;
+  max-width: 420px;
+}
+
+.salle-search label,
+.list-search label {
+  margin-bottom: 8px;
+}
+
+.salle-no-results,
+.list-no-results {
+  margin-top: 20px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
 /* ── Card Grid ── */
 .Salle-container {
   display: grid;

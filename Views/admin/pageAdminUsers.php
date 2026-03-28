@@ -32,6 +32,16 @@
                 <input type="submit" value="Ajouter un utilisateur">
             </form>
 
+            <div class="admin-search" role="search">
+                <label for="admin-users-search-input">Rechercher un utilisateur</label>
+                <input
+                    type="text"
+                    id="admin-users-search-input"
+                    placeholder="Nom, prénom, email, rôle ou ID..."
+                    autocomplete="off"
+                >
+            </div>
+
             <div class="admin-table-wrapper">
                 <table class="admin-table">
                     <thead>
@@ -46,7 +56,7 @@
                     </thead>
                     <tbody>
                         <?php foreach ($users as $user) : ?>
-                            <tr>
+                            <tr data-search="<?= htmlspecialchars(strtolower($user->id_utilisateur . ' ' . $user->uti_nom . ' ' . $user->uti_prenom . ' ' . $user->uti_email . ' ' . $user->uti_role), ENT_QUOTES, 'UTF-8') ?>">
                                 <td><?= $user->id_utilisateur ?></td>
                                 <td><input type="text" name="nom" value="<?= $user->uti_nom ?>" form="user-form-<?= $user->id_utilisateur ?>" required></td>
                                 <td><input type="text" name="prenom" value="<?= $user->uti_prenom ?>" form="user-form-<?= $user->id_utilisateur ?>" required></td>
@@ -69,6 +79,17 @@
                     </tbody>
                 </table>
             </div>
+
+            <p id="admin-users-no-results" class="admin-no-results" hidden>Aucun utilisateur ne correspond à votre recherche.</p>
         </section>
     </div>
 </div>
+
+<script>
+    initSearchFilter({
+        inputSelector: "#admin-users-search-input",
+        itemSelector: ".admin-table tbody tr",
+        emptySelector: "#admin-users-no-results",
+        visibleDisplay: "table-row"
+    });
+</script>

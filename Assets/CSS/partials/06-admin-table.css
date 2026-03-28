@@ -100,6 +100,21 @@
   opacity: 0.75;
 }
 
+.admin-search {
+  margin-bottom: 16px;
+  max-width: 420px;
+}
+
+.admin-search label {
+  margin-bottom: 8px;
+}
+
+.admin-no-results {
+  margin-top: 14px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
 /* ── Admin Form (add new item) ── */
 .admin-form {
   background: var(--bg-white);

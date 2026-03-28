@@ -32,6 +32,16 @@
                 <input type="submit" value="Ajouter une salle">
             </form>
 
+            <div class="admin-search" role="search">
+                <label for="admin-salles-search-input">Rechercher une salle</label>
+                <input
+                    type="text"
+                    id="admin-salles-search-input"
+                    placeholder="Nom, numéro, taille ou ID..."
+                    autocomplete="off"
+                >
+            </div>
+
             <div class="admin-table-wrapper">
                 <table class="admin-table">
                     <thead>
@@ -48,7 +58,7 @@
                     </thead>
                     <tbody>
                         <?php foreach ($salles as $salle) : ?>
-                            <tr>
+                            <tr data-search="<?= htmlspecialchars(strtolower($salle->id_salle . ' ' . $salle->sal_nom . ' ' . $salle->sal_numero . ' ' . $salle->sal_taille . ' ' . $salle->sal_image), ENT_QUOTES, 'UTF-8') ?>">
                                 <td><?= $salle->id_salle ?></td>
                                 <td>
                                     <select name="id_categorie" form="salle-form-<?= $salle->id_salle ?>">
@@ -80,6 +90,17 @@
                     </tbody>
                 </table>
             </div>
+
+            <p id="admin-salles-no-results" class="admin-no-results" hidden>Aucune salle ne correspond à votre recherche.</p>
         </section>
     </div>
 </div>
+
+<script>
+    initSearchFilter({
+        inputSelector: "#admin-salles-search-input",
+        itemSelector: ".admin-table tbody tr",
+        emptySelector: "#admin-salles-no-results",
+        visibleDisplay: "table-row"
+    });
+</script>

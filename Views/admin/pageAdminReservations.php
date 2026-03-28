@@ -34,6 +34,16 @@
                 <input type="submit" value="Ajouter une réservation">
             </form>
 
+            <div class="admin-search" role="search">
+                <label for="admin-reservations-search-input">Rechercher une réservation</label>
+                <input
+                    type="text"
+                    id="admin-reservations-search-input"
+                    placeholder="Salle, utilisateur, dates ou ID..."
+                    autocomplete="off"
+                >
+            </div>
+
             <div class="admin-table-wrapper">
                 <table class="admin-table">
                     <thead>
@@ -49,7 +59,7 @@
                     </thead>
                     <tbody>
                         <?php foreach ($reservations as $reservation) : ?>
-                            <tr>
+                            <tr data-search="<?= htmlspecialchars(strtolower($reservation->id_reservation . ' ' . $reservation->sal_nom . ' ' . $reservation->sal_numero . ' ' . $reservation->uti_nom . ' ' . $reservation->uti_prenom . ' ' . $reservation->res_dateDebut . ' ' . $reservation->res_dateFin), ENT_QUOTES, 'UTF-8') ?>">
                                 <td><?= $reservation->id_reservation ?></td>
                                 <td>
                                     <select name="id_salle" form="reservation-form-<?= $reservation->id_reservation ?>">
@@ -86,6 +96,17 @@
                     </tbody>
                 </table>
             </div>
+
+            <p id="admin-reservations-no-results" class="admin-no-results" hidden>Aucune réservation ne correspond à votre recherche.</p>
         </section>
     </div>
 </div>
+
+<script>
+    initSearchFilter({
+        inputSelector: "#admin-reservations-search-input",
+        itemSelector: ".admin-table tbody tr",
+        emptySelector: "#admin-reservations-no-results",
+        visibleDisplay: "table-row"
+    });
+</script>

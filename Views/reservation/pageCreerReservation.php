@@ -9,6 +9,12 @@
         <input type="hidden" name="action" value="createReservation">
         <div class="form-group">
             <label for="id_salle">Salle</label>
+            <input
+                type="text"
+                id="reservation-create-search-input"
+                placeholder="Rechercher une salle par nom ou numéro..."
+                autocomplete="off"
+            >
             <select name="id_salle" id="id_salle" required>
                 <option value="">-- Choisir une salle --</option>
                 <?php foreach ($salles as $salle) : ?>
@@ -18,6 +24,7 @@
                     </option>
                 <?php endforeach; ?>
             </select>
+            <p id="reservation-create-no-results" class="list-no-results" hidden>Aucune salle ne correspond à votre recherche.</p>
         </div>
 
         <div class="form-group">
@@ -39,3 +46,10 @@
     </form>
 </div>
 
+<script>
+    initSelectSearch({
+        inputSelector: "#reservation-create-search-input",
+        selectSelector: "#id_salle",
+        emptySelector: "#reservation-create-no-results"
+    });
+</script>

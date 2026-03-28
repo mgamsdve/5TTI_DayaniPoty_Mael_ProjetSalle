@@ -31,6 +31,16 @@
                 <input type="submit" value="Ajouter une contenance">
             </form>
 
+            <div class="admin-search" role="search">
+                <label for="admin-contenances-search-input">Rechercher une contenance</label>
+                <input
+                    type="text"
+                    id="admin-contenances-search-input"
+                    placeholder="Salle, équipement, quantité ou ID..."
+                    autocomplete="off"
+                >
+            </div>
+
             <div class="admin-table-wrapper">
                 <table class="admin-table">
                     <thead>
@@ -45,7 +55,7 @@
                     </thead>
                     <tbody>
                         <?php foreach ($contenances as $contenance) : ?>
-                            <tr>
+                            <tr data-search="<?= htmlspecialchars(strtolower($contenance->id_contenance . ' ' . $contenance->sal_nom . ' ' . $contenance->sal_numero . ' ' . $contenance->equi_nom . ' ' . $contenance->cont_quantite), ENT_QUOTES, 'UTF-8') ?>">
                                 <td><?= $contenance->id_contenance ?></td>
                                 <td>
                                     <select name="id_salle" form="contenance-form-<?= $contenance->id_contenance ?>">
@@ -81,6 +91,17 @@
                     </tbody>
                 </table>
             </div>
+
+            <p id="admin-contenances-no-results" class="admin-no-results" hidden>Aucune contenance ne correspond à votre recherche.</p>
         </section>
     </div>
 </div>
+
+<script>
+    initSearchFilter({
+        inputSelector: "#admin-contenances-search-input",
+        itemSelector: ".admin-table tbody tr",
+        emptySelector: "#admin-contenances-no-results",
+        visibleDisplay: "table-row"
+    });
+</script>
