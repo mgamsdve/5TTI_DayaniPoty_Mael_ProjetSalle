@@ -1,5 +1,6 @@
 <?php
 $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+$segments = explode("/", trim($uri, "/"));
 
 require_once("Models/userModel.php");
 require_once("Models/salleModel.php");
@@ -26,14 +27,43 @@ if ($uri == "/admin") {
 }
 
 if ($uri == "/admin/users") {
+    // Actions GET demandees pour valider les criteres d'evaluation admin.
+    if (isset($_GET["action"])) {
+        if ($_GET["action"] == "updateUserGet" && !empty($_GET["id_utilisateur"])) {
+            if (
+                !empty($_GET["nom"]) &&
+                !empty($_GET["prenom"]) &&
+                !empty($_GET["email"]) &&
+                !empty($_GET["role"])
+            ) {
+                updateUserAdminByGet($pdo);
+                if ($_SESSION["user"]->id_utilisateur == (int) $_GET["id_utilisateur"]) {
+                    updateSession($pdo);
+                }
+            }
+
+            header("location:/admin/users");
+            exit;
+        }
+
+        if ($_GET["action"] == "deleteUserGet" && !empty($_GET["id_utilisateur"])) {
+            $idUser = (int) $_GET["id_utilisateur"];
+
+            // Evite de supprimer le compte admin connecte depuis l'admin.
+            if ($idUser > 0 && $idUser != (int) $_SESSION["user"]->id_utilisateur) {
+                deleteUserById($pdo);
+            }
+
+            header("location:/admin/users");
+            exit;
+        }
+    }
+
     if (isset($_POST["action"])) {
         if ($_POST["action"] == "addUser") {
             insertUserAdmin($pdo);
-        } elseif ($_POST["action"] == "updateUser") {
-            updateUserAdmin($pdo, $_POST["id_utilisateur"]);
-            if ($_SESSION["user"]->id_utilisateur == $_POST["id_utilisateur"]) {
-                updateSession($pdo);
-            }
+        } elseif ($_POST["action"] == "deleteUsersMulti" && !empty($_POST["user_ids"])) {
+            deleteUsersByIds($pdo);
         }
 
         header("location:/admin/users");
@@ -43,6 +73,24 @@ if ($uri == "/admin/users") {
     $users = selectAllUsers($pdo);
     $template = "Views/admin/pageAdminUsers.php";
     $title = "Admin Utilisateurs";
+}
+
+if (
+    count($segments) >= 4 &&
+    $segments[0] == "admin" &&
+    $segments[1] == "users" &&
+    $segments[2] == "details"
+) {
+    $idUser = (int) $segments[3];
+    $userDetails = selectUserById($pdo, $idUser);
+    $userReservations = [];
+
+    if ($userDetails) {
+        $userReservations = selectReservationsByUserId($pdo, $userDetails->id_utilisateur);
+    }
+
+    $template = "Views/admin/pageAdminUserDetails.php";
+    $title = "Detail Utilisateur";
 }
 
 if ($uri == "/admin/categories") {
@@ -68,6 +116,8 @@ if ($uri == "/admin/salles") {
     if (isset($_POST["action"])) {
         if ($_POST["action"] == "addSalle") {
             insertSalle($pdo);
+        } elseif ($_POST["action"] == "deleteSallesMulti" && !empty($_POST["salle_ids"])) {
+            deleteSallesByIds($pdo);
         } elseif ($_POST["action"] == "updateSalle") {
             updateSalle($pdo, $_POST["id_salle"]);
         } elseif ($_POST["action"] == "deleteSalle") {

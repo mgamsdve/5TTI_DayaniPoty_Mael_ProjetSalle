@@ -1,0 +1,313 @@
+/* ═══════════════════════════════════════════
+   VIEW UTILITIES
+   ═══════════════════════════════════════════ */
+
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-sm {
+  font-size: 0.8rem;
+}
+
+.text-primary-strong {
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.text-primary-strong:hover {
+  color: var(--primary-dark);
+}
+
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.mt-10 {
+  margin-top: 10px !important;
+}
+
+.mt-12 {
+  margin-top: 12px !important;
+}
+
+.mt-32 {
+  margin-top: 32px !important;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.mb-4 {
+  margin-bottom: 4px !important;
+}
+
+.mb-8 {
+  margin-bottom: 8px !important;
+}
+
+.mb-12 {
+  margin-bottom: 12px !important;
+}
+
+.mb-16 {
+  margin-bottom: 16px !important;
+}
+
+.mb-18 {
+  margin-bottom: 18px !important;
+}
+
+.mb-20 {
+  margin-bottom: 20px !important;
+}
+
+.mb-24 {
+  margin-bottom: 24px !important;
+}
+
+.mb-32 {
+  margin-bottom: 32px !important;
+}
+
+.gap-12 {
+  gap: 12px;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.icon-14 {
+  width: 14px;
+  height: 14px;
+}
+
+.icon-16 {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-48 {
+  width: 48px;
+  height: 48px;
+}
+
+.icon-primary {
+  color: var(--primary);
+}
+
+.icon-muted {
+  color: var(--text-muted);
+}
+
+.avatar-circle {
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar-circle--sm {
+  width: 40px;
+  height: 40px;
+  font-size: 0.85rem;
+}
+
+.avatar-circle--md {
+  width: 48px;
+  height: 48px;
+  font-size: 1rem;
+}
+
+.avatar-circle--lg {
+  width: 64px;
+  height: 64px;
+  font-size: 1.5rem;
+}
+
+.auth-card--wide {
+  max-width: 520px;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 28px;
+  gap: 12px;
+}
+
+.profile-title {
+  margin-bottom: 0;
+  font-size: 1.4rem;
+}
+
+.profile-submit {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.profile-actions .btn-danger {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 0;
+  color: var(--text-secondary);
+}
+
+.empty-state__icon {
+  display: block;
+  margin: 0 auto 16px;
+}
+
+.empty-state__text {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.admin-bulk-card {
+  padding: 18px 28px;
+  margin-top: -6px;
+}
+
+.admin-bulk-card label {
+  margin-top: 0;
+}
+
+.admin-bulk-card p {
+  margin-bottom: 12px;
+}
+
+.admin-user-link {
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.admin-user-link:hover {
+  color: var(--primary-dark);
+}
+
+.btn-delete--compact {
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-block-center {
+  width: 100%;
+  justify-content: center;
+}
+
+.section-copy {
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+.user-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.user-id {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.details-layout--spaced {
+  margin-top: 12px;
+}
+
+.details-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.details-title {
+  margin-bottom: 4px;
+}
+
+.details-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.salle-image--tall {
+  height: 280px;
+  margin-bottom: 20px;
+}
+
+.badge--spaced {
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.equipment-pills--spaced {
+  margin-bottom: 24px;
+}
+
+.salle-link--spaced {
+  margin-top: 32px;
+}
+
+.form-help {
+  color: var(--text-muted);
+}
+
+.room-placeholder-icon {
+  color: var(--primary);
+}

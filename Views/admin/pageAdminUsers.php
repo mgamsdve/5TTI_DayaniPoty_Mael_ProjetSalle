@@ -3,7 +3,7 @@
     <div class="admin-content">
         <h1>Utilisateurs</h1>
         <a href="/admin" class="admin-back">
-            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i>
+            <i data-lucide="arrow-left" class="icon-14"></i>
             Retour à l'administration
         </a>
 
@@ -32,6 +32,12 @@
                 <input type="submit" value="Ajouter un utilisateur">
             </form>
 
+            <div class="admin-form admin-bulk-card">
+                <label for="admin-users-bulk-select" class="mt-0">Suppression multiple (multi select)</label>
+                <p>Cochez des utilisateurs dans le tableau puis lancez la suppression de groupe.</p>
+                <input type="submit" id="admin-users-bulk-select" value="Supprimer les utilisateurs selectionnes" class="btn-danger" form="bulk-delete-users-form">
+            </div>
+
             <div class="admin-search" role="search">
                 <label for="admin-users-search-input">Rechercher un utilisateur</label>
                 <input
@@ -46,19 +52,33 @@
                 <table class="admin-table">
                     <thead>
                         <tr>
+                            <th>Selection</th>
                             <th>ID</th>
                             <th>Nom</th>
                             <th>Prénom</th>
                             <th>Email</th>
                             <th>Rôle</th>
-                            <th>Action</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($users as $user) : ?>
                             <tr data-search="<?= htmlspecialchars(strtolower($user->id_utilisateur . ' ' . $user->uti_nom . ' ' . $user->uti_prenom . ' ' . $user->uti_email . ' ' . $user->uti_role), ENT_QUOTES, 'UTF-8') ?>">
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        name="user_ids[]"
+                                        value="<?= $user->id_utilisateur ?>"
+                                        form="bulk-delete-users-form"
+                                        aria-label="Selectionner l'utilisateur <?= $user->id_utilisateur ?>"
+                                    >
+                                </td>
                                 <td><?= $user->id_utilisateur ?></td>
-                                <td><input type="text" name="nom" value="<?= $user->uti_nom ?>" form="user-form-<?= $user->id_utilisateur ?>" required></td>
+                                <td>
+                                    <a href="/admin/users/details/<?= $user->id_utilisateur ?>" class="admin-user-link">
+                                        <?= htmlspecialchars($user->uti_nom) ?>
+                                    </a>
+                                </td>
                                 <td><input type="text" name="prenom" value="<?= $user->uti_prenom ?>" form="user-form-<?= $user->id_utilisateur ?>" required></td>
                                 <td><input type="email" name="email" value="<?= $user->uti_email ?>" form="user-form-<?= $user->id_utilisateur ?>" required></td>
                                 <td>
@@ -68,17 +88,30 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <form method="POST" id="user-form-<?= $user->id_utilisateur ?>" class="admin-inline-form">
-                                        <input type="hidden" name="action" value="updateUser">
-                                        <input type="hidden" name="id_utilisateur" value="<?= $user->id_utilisateur ?>">
-                                        <button type="submit">Modifier</button>
-                                    </form>
+                                    <div class="admin-inline-form">
+                                        <form method="GET" action="/admin/users" id="user-form-<?= $user->id_utilisateur ?>" class="admin-inline-form">
+                                            <input type="hidden" name="action" value="updateUserGet">
+                                            <input type="hidden" name="id_utilisateur" value="<?= $user->id_utilisateur ?>">
+                                            <input type="hidden" name="nom" value="<?= htmlspecialchars($user->uti_nom, ENT_QUOTES, 'UTF-8') ?>">
+                                            <button type="submit">Modifier</button>
+                                        </form>
+
+                                        <form method="GET" action="/admin/users" class="admin-inline-form" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                                            <input type="hidden" name="action" value="deleteUserGet">
+                                            <input type="hidden" name="id_utilisateur" value="<?= $user->id_utilisateur ?>">
+                                            <button type="submit" class="btn-delete btn-delete--compact">Supprimer</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach ?>
                     </tbody>
                 </table>
             </div>
+
+            <form method="POST" id="bulk-delete-users-form" hidden>
+                <input type="hidden" name="action" value="deleteUsersMulti">
+            </form>
 
             <p id="admin-users-no-results" class="admin-no-results" hidden>Aucun utilisateur ne correspond à votre recherche.</p>
         </section>

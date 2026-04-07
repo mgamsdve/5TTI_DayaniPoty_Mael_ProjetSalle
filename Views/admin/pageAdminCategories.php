@@ -3,7 +3,7 @@
     <div class="admin-content">
         <h1>Catégories</h1>
         <a href="/admin" class="admin-back">
-            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i>
+            <i data-lucide="arrow-left" class="icon-14"></i>
             Retour à l'administration
         </a>
 

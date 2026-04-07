@@ -2,7 +2,7 @@
     <?php require_once("Views/Components/admin-sidebar.php"); ?>
     <div class="admin-content">
         <h1>Administration</h1>
-        <p style="color:var(--text-secondary); margin-bottom: 32px;">Gérez toutes les ressources de l'application.</p>
+        <p class="section-copy">Gérez toutes les ressources de l'application.</p>
 
         <div class="admin-search" role="search">
             <label for="admin-home-search-input">Rechercher un module</label>

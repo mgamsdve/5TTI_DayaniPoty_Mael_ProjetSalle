@@ -139,6 +139,28 @@ function updateUserAdmin($pdo, $idUser)
     }
 }
 
+function updateUserAdminByGet($pdo)
+{
+    try {
+        $idUser = (int) ($_GET["id_utilisateur"] ?? 0);
+
+        $query = 'UPDATE Utilisateur
+            SET uti_nom = :nom, uti_prenom = :prenom, uti_email = :email, uti_role = :role
+            WHERE id_utilisateur = :idUser';
+        $updateUser = $pdo->prepare($query);
+        $updateUser->execute([
+            "nom" => $_GET["nom"],
+            "prenom" => $_GET["prenom"],
+            "email" => $_GET["email"],
+            "role" => $_GET["role"],
+            "idUser" => $idUser
+        ]);
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}
+
 function updateSession($pdo)
 {
     try {
@@ -163,6 +185,49 @@ function deleteUser($pdo)
         $insertUser->execute([
             "userId"   => $_SESSION["user"]->id_utilisateur
         ]); //exécuter la query
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}
+
+function deleteUserById($pdo)
+{
+    try {
+        $idUser = (int) ($_GET["id_utilisateur"] ?? 0);
+
+        if ($idUser <= 0) {
+            return;
+        }
+
+        $query = 'DELETE FROM Utilisateur WHERE id_utilisateur = :idUser';
+        $deleteUser = $pdo->prepare($query);
+        $deleteUser->execute([
+            "idUser" => $idUser
+        ]);
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}
+
+function deleteUsersByIds($pdo)
+{
+    try {
+        $userIds = $_POST["user_ids"] ?? [];
+
+        if (empty($userIds)) {
+            return;
+        }
+
+        $query = 'DELETE FROM Utilisateur WHERE id_utilisateur = :idUser';
+        $deleteUser = $pdo->prepare($query);
+
+        foreach ($userIds as $id) {
+            $deleteUser->execute([
+                "idUser" => (int) $id
+            ]);
+        }
     } catch (PDOException $e) {
         $message = $e->getMessage();
         die($message);

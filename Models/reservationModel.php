@@ -94,6 +94,36 @@ function insertReservation($pdo)
     }
 }
 
+function insertReservationsMultiForUser($pdo)
+{
+    try {
+        $idSalles = $_POST["id_salles"] ?? [];
+        $idUtilisateur = (int) $_SESSION["user"]->id_utilisateur;
+        $dateDebut = $_POST["dateDebut"] ?? "";
+        $dateFin = $_POST["dateFin"] ?? "";
+
+        if (empty($idSalles)) {
+            return;
+        }
+
+        $query = 'INSERT INTO Reservation (id_salle, id_utilisateur, res_dateDebut, res_dateFin)
+            VALUES (:idSalle, :idUtilisateur, :dateDebut, :dateFin)';
+        $insertReservation = $pdo->prepare($query);
+
+        foreach ($idSalles as $idSalle) {
+            $insertReservation->execute([
+                "idSalle" => (int) $idSalle,
+                "idUtilisateur" => $idUtilisateur,
+                "dateDebut" => $dateDebut,
+                "dateFin" => $dateFin
+            ]);
+        }
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}
+
 function updateReservation($pdo, $idReservation)
 {
     try {

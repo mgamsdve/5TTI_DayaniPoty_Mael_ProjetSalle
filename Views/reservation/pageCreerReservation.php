@@ -8,23 +8,18 @@
     <form action="/create-reservation" method="POST">
         <input type="hidden" name="action" value="createReservation">
         <div class="form-group">
-            <label for="id_salle">Salle</label>
-            <input
-                type="text"
-                id="reservation-create-search-input"
-                placeholder="Rechercher une salle par nom ou numéro..."
-                autocomplete="off"
-            >
-            <select name="id_salle" id="id_salle" required>
-                <option value="">-- Choisir une salle --</option>
+            <label for="id_salles">Salles (selection multiple)</label>
+            <select name="id_salles[]" id="id_salles" multiple required size="8">
                 <?php foreach ($salles as $salle) : ?>
-                    <option value="<?= $salle->id_salle ?>"
-                        <?= isset($_POST["id_salle"]) && $_POST["id_salle"] == $salle->id_salle ? "selected" : "" ?>>
+                    <?php
+                    $isSelected = isset($_POST["id_salles"]) && is_array($_POST["id_salles"]) && in_array((string) $salle->id_salle, $_POST["id_salles"]);
+                    ?>
+                    <option value="<?= $salle->id_salle ?>" <?= $isSelected ? "selected" : "" ?>>
                         <?= htmlspecialchars($salle->sal_nom) ?> (N°<?= htmlspecialchars($salle->sal_numero) ?>)
                     </option>
                 <?php endforeach; ?>
             </select>
-            <p id="reservation-create-no-results" class="list-no-results" hidden>Aucune salle ne correspond à votre recherche.</p>
+            <small class="form-help">Maintenez Cmd (Mac) ou Ctrl (Windows) pour selectionner plusieurs salles.</small>
         </div>
 
         <div class="form-group">
@@ -45,11 +40,3 @@
         </div>
     </form>
 </div>
-
-<script>
-    initSelectSearch({
-        inputSelector: "#reservation-create-search-input",
-        selectSelector: "#id_salle",
-        emptySelector: "#reservation-create-no-results"
-    });
-</script>

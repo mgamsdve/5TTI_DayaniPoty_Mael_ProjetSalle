@@ -111,6 +111,29 @@ function deleteSalle($pdo, $idSalle)
     }
 }
 
+function deleteSallesByIds($pdo)
+{
+    try {
+        $salleIds = $_POST["salle_ids"] ?? [];
+
+        if (empty($salleIds)) {
+            return;
+        }
+
+        $query = 'DELETE FROM Salle WHERE id_salle = :idSalle';
+        $deleteSalle = $pdo->prepare($query);
+
+        foreach ($salleIds as $idSalle) {
+            $deleteSalle->execute([
+                "idSalle" => (int) $idSalle
+            ]);
+        }
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}
+
 function selectSalleByNumero($pdo, $numeroSalle)
 {
     try {

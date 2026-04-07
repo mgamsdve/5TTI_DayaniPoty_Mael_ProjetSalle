@@ -77,7 +77,7 @@ $sallesCount = count($salles ?? []);
                             <?php if (!empty($salle->sal_image)): ?>
                                 <img src="<?= htmlspecialchars($salle->sal_image) ?>" alt="Salle <?= htmlspecialchars($salle->sal_nom) ?>">
                             <?php else: ?>
-                                <svg width="72" height="72" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="color: var(--primary);">
+                                <svg width="72" height="72" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="room-placeholder-icon">
                                     <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8" />
                                     <path d="M7 10H17M7 14H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                                 </svg>
@@ -92,7 +92,7 @@ $sallesCount = count($salles ?? []);
                 <?php for ($i = 1; $i <= 3; $i++): ?>
                     <article class="room-card">
                         <div class="room-media">
-                            <svg width="72" height="72" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="color: var(--primary);">
+                            <svg width="72" height="72" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="room-placeholder-icon">
                                 <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8" />
                                 <path d="M7 10H17M7 14H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                             </svg>

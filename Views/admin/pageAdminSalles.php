@@ -3,7 +3,7 @@
     <div class="admin-content">
         <h1>Salles</h1>
         <a href="/admin" class="admin-back">
-            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i>
+            <i data-lucide="arrow-left" class="icon-14"></i>
             Retour à l'administration
         </a>
 
@@ -42,10 +42,17 @@
                 >
             </div>
 
+            <div class="admin-form admin-bulk-card">
+                <label for="admin-salles-bulk-select" class="mt-0">Suppression multiple (multi select)</label>
+                <p>Cochez des salles dans le tableau puis lancez la suppression de groupe.</p>
+                <input type="submit" id="admin-salles-bulk-select" value="Supprimer les salles selectionnees" class="btn-danger" form="bulk-delete-salles-form">
+            </div>
+
             <div class="admin-table-wrapper">
                 <table class="admin-table">
                     <thead>
                         <tr>
+                            <th>Selection</th>
                             <th>ID</th>
                             <th>Catégorie</th>
                             <th>Nom</th>
@@ -59,6 +66,15 @@
                     <tbody>
                         <?php foreach ($salles as $salle) : ?>
                             <tr data-search="<?= htmlspecialchars(strtolower($salle->id_salle . ' ' . $salle->sal_nom . ' ' . $salle->sal_numero . ' ' . $salle->sal_taille . ' ' . $salle->sal_image), ENT_QUOTES, 'UTF-8') ?>">
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        name="salle_ids[]"
+                                        value="<?= $salle->id_salle ?>"
+                                        form="bulk-delete-salles-form"
+                                        aria-label="Selectionner la salle <?= $salle->id_salle ?>"
+                                    >
+                                </td>
                                 <td><?= $salle->id_salle ?></td>
                                 <td>
                                     <select name="id_categorie" form="salle-form-<?= $salle->id_salle ?>">
@@ -90,6 +106,10 @@
                     </tbody>
                 </table>
             </div>
+
+            <form method="POST" id="bulk-delete-salles-form" hidden>
+                <input type="hidden" name="action" value="deleteSallesMulti">
+            </form>
 
             <p id="admin-salles-no-results" class="admin-no-results" hidden>Aucune salle ne correspond à votre recherche.</p>
         </section>

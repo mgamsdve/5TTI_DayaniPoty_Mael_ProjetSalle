@@ -23,7 +23,8 @@ if ($uri == "/create-reservation") {
     $erreurReservation = null;
 
     if (isset($_POST["action"]) && $_POST["action"] == "createReservation") {
-        if (empty($_POST["id_salle"]) || empty($_POST["dateDebut"]) || empty($_POST["dateFin"])) {
+        // Permet de reserver plusieurs salles d'un coup avec la meme plage de dates.
+        if (empty($_POST["id_salles"]) || empty($_POST["dateDebut"]) || empty($_POST["dateFin"])) {
             $erreurReservation = "Tous les champs sont obligatoires.";
         } elseif ($_POST["dateDebut"] >= $_POST["dateFin"]) {
             $erreurReservation = "La date de fin doit être après la date de début.";
@@ -38,7 +39,7 @@ if ($uri == "/create-reservation") {
                 if ($dureeReservation > 5) {
                     $erreurReservation = "La durée maximale de réservation est de 5 jours.";
                 } else {
-                    insertReservation($pdo);
+                    insertReservationsMultiForUser($pdo);
                     header("location:/Reservation");
                     exit;
                 }

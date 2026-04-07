@@ -1,551 +1,471 @@
-# Guide de démarrage d’un projet web (MVC + BDD)
+# Guide de démarrage — Projet MVC PHP
 
-## 1. Base de données (BDD)
+## 0. Prérequis
 
-### BDD vide
-- Exemple de Nathan
-- Être cohérent dans les nommages :
-  - Choisir soit le pluriel, soit le singulier pour les entités (mais rester cohérent)
-  - Utiliser des préfixes pour les champs (ex : `uti_nom`, `uti_email`, etc.)
-  - Nommer correctement les clés étrangères  
-    → Exemple : `bat_lieu_id` au lieu de `lieu_id`
-- Créer la base de données vide en envoyant le MCD (Modèle Conceptuel de Données) à une IA
+Installe un environnement local :
+- **Laragon** (recommandé Windows) — Apache + PHP + MySQL en un clic
+- **XAMPP** (Windows/Mac) — même chose
+- **MAMP** (Mac)
 
----
+Lance le serveur. Vérifie que `http://localhost` répond dans le navigateur.
 
-### BDD avec des données
-- Remplir la base avec des données générées par IA (~20 lignes par table)
-- Envoyer le schéma de la BDD à l’IA
-- Demander des données variées :
-  - emails différents
-  - mots de passe différents
-  - noms/prénoms différents
-- Tester la connexion à la BDD :
-  - via MySQL Workbench ou autre outil
-  - soit en localhost
-  - soit via le serveur de l’école
+Installe l'extension **PHP Server** dans VS Code, ou utilise le serveur intégré de PhpStorm/Laragon.
 
 ---
 
-## 2. Structure du projet (MVC)
+## 1. Créer la base de données
 
-Créer les dossiers principaux (vides) :
-- `Assets/`
-- `Config/`
-- `Controllers/`
-- `Models/`
-- `Views/`
-- `SQL/`
+### 1.1 Ouvrir phpMyAdmin
+
+Accède à `http://localhost/phpmyadmin` (Laragon/XAMPP).
+
+**Nouvelle base de données** → entre un nom (ex : `mon_projet`) → **Créer**.
+
+Ou via MySQL Workbench :
+
+```sql
+CREATE DATABASE mon_projet CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### 1.2 Créer les tables
+
+Colle le contenu de ton fichier SQL (voir dossier `SQL/`) dans l'onglet **SQL** de phpMyAdmin et exécute.
+
+Structure minimale obligatoire — table `Utilisateur` :
+
+```sql
+CREATE TABLE Utilisateur (
+    id_utilisateur INT AUTO_INCREMENT NOT NULL,
+    uti_nom        VARCHAR(50)  NOT NULL,
+    uti_prenom     VARCHAR(50)  NOT NULL,
+    uti_email      VARCHAR(100) NOT NULL UNIQUE,
+    uti_mdp        VARCHAR(255) NOT NULL,
+    uti_role       ENUM('utilisateur','admin') DEFAULT 'utilisateur',
+    PRIMARY KEY (id_utilisateur)
+) ENGINE=InnoDB;
+```
+
+Ajoute ensuite les tables propres à ton projet (voitures, bateaux, livres, etc.).  
+Voir [guide-bdd.md](guide-bdd.md) pour les conventions de nommage et les exemples SQL complets.
+
+### 1.3 Vérification
+
+Dans phpMyAdmin → onglet **Structure** : tu dois voir tes tables.  
+Insère une ligne de test manuellement, vérifie qu'elle apparaît dans **Parcourir**.
+
+---
+
+## 2. Structure des dossiers
+
+Crée ces dossiers à la racine de ton projet (dans `htdocs/` pour XAMPP, `www/` pour Laragon) :
+
+```text
+MonProjet/
+├── index.php
+├── Config/
+│   └── connectDatabase.php
+├── Controllers/
+│   └── monProjetController.php
+├── Models/
+│   └── monProjetModel.php
+├── Views/
+│   ├── base.php
+│   ├── Components/
+│   │   ├── header.php
+│   │   └── footer.php
+│   └── monProjet/
+│       └── pageAccueil.php
+├── Assets/
+│   └── CSS/
+│       └── style.css
+└── SQL/
+    └── script.sql
+```
 
 ---
 
 ## 3. Connexion à la base de données
 
-Créer le fichier : `Config/connectDatabase.php`
+### Fichier : `Config/connectDatabase.php`
 
 ```php
 <?php
 try {
     $pdo = new PDO(
-        "mysql:host=10.10.67.227;dbname=Farhan;port=3306",
-        "Farhan",
+        "mysql:host=localhost;dbname=mon_projet;port=3306",
+        // adapte dbname avec le nom exact de ta base
+        // si tu utilises le serveur de l'école, remplace localhost par l'IP (ex: 10.10.67.227)
         "root",
+        "root",
+        // mot de passe : souvent "" sur XAMPP, "root" sur Laragon
         [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
         ]
     );
 } catch (PDOException $e) {
-    $message = $e->getMessage();
-    die($message);
+    die($e->getMessage());
 }
 ```
 
+### 3.1 Vérification de la connexion
+
+Crée temporairement un fichier `test.php` à la racine :
+
+```php
+<?php
+require_once "Config/connectDatabase.php";
+echo "Connexion OK";
+```
+
+Ouvre `http://localhost/MonProjet/test.php`.  
+Tu dois voir **Connexion OK**.  
+Si tu vois un message d'erreur PDO, corrige `host`, `dbname` ou le mot de passe.  
+**Supprime `test.php` une fois la connexion confirmée.**
+
 ---
 
-## 4. Point d’entrée du site
+## 4. Point d'entrée
 
-Créer le fichier : `index.php`
+### Fichier : `index.php`
 
 ```php
 <?php
 session_start();
-require_once("Config/connectDatabase.php");
+// session_start() DOIT être la première ligne — avant tout output HTML
+
+require_once "Config/connectDatabase.php";
+require_once "Controllers/userController.php";
+require_once "Controllers/monProjetController.php";
+// ajoute un require_once par controller
+// userController doit être avant les controllers qui protègent leurs routes
 ```
+
+`index.php` ne gère pas les routes lui-même. Il se contente d'inclure les controllers.  
+C'est chaque controller qui lit l'URL et décide quoi afficher.
 
 ---
 
-## 5. Mise en place du MVC (3 éléments en parallèle)
+## 5. Layout principal
 
-### 5.1 Layout principal (base)
+### Fichier : `Views/base.php`
 
-Créer : `Views/base.php`
-
-```html
+```php
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../Assets/CSS/style.css">
+    <link rel="stylesheet" href="/Assets/CSS/style.css">
     <title><?= $title ?></title>
 </head>
-
 <body>
-    <header class="glass">
-        <!-- vide pour l’instant -->
+    <header>
+        <?php require_once("Views/Components/header.php"); ?>
     </header>
 
-    <main class="fade-in">
+    <main>
         <?php require_once($template); ?>
+        <!-- $template est une variable définie par le controller avant d'inclure base.php -->
     </main>
 
-    <footer class="fade-in">
-        <!-- vide pour l’instant -->
+    <footer>
+        <?php require_once("Views/Components/footer.php"); ?>
     </footer>
 </body>
-
 </html>
 ```
 
+`base.php` est la coquille commune à toutes les pages.  
+Le controller définit `$template` (chemin vers la vue) et `$title` (titre de la page), puis inclut `base.php`.
+
 ---
 
-### 5.2 Controller principal
+## 6. Premier controller
 
-Créer : `Controllers/<tonProjet>Controller.php`
+### Fichier : `Controllers/monProjetController.php`
 
 ```php
 <?php
-$uri = $_SERVER["REQUEST_URI"];
+$uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+// parse_url() extrait uniquement le chemin, sans les paramètres GET (?foo=bar)
+// $_SERVER["REQUEST_URI"] tout seul peut casser avec des query strings
 
-if ($uri == "/index.php" || $uri == "/") {
-    $template = "Views/tonProjet/pageAccueil.php";
-    $title = "Accueil";
+require_once("Models/monProjetModel.php");
+
+if ($uri == "/" || $uri == "/index.php") {
+    $title    = "Accueil";
+    $template = "Views/monProjet/pageAccueil.php";
+}
+
+// TOUJOURS à la fin du controller :
+if (isset($template)) {
+    require_once("Views/base.php");
 }
 ```
 
----
-
-### 5.3 Vue (page)
-
-Créer : `Views/tonProjet/pageAccueil.php`
-
-```html
-<h1>Bienvenue sur mon projet</h1>
-<h2>Accueil</h2>
-
-<!-- Développer ici le contenu HTML de la page d’accueil -->
-```
+**Important** : `require_once("Views/base.php")` se fait depuis le controller, **pas** depuis `index.php`.  
+C'est `base.php` qui inclut la vue via `require_once($template)`.
 
 ---
 
-### 5.4 Relier le controller à l’index
+## 7. Premières vues
 
-Modifier `index.php` :
+### Fichier : `Views/monProjet/pageAccueil.php`
 
 ```php
-<?php
-require_once("Config/connectDatabase.php");
-require_once("Controllers/<tonProjet>Controller.php");
+<h1>Accueil</h1>
+<p>Bienvenue sur mon projet.</p>
+```
+
+### Fichier : `Views/Components/header.php`
+
+```php
+<nav>
+    <a href="/">Accueil</a>
+</nav>
+```
+
+### Fichier : `Views/Components/footer.php`
+
+```php
+<p>&copy; Mon Projet</p>
 ```
 
 ---
 
-## 6. Lancer le projet
+## 8. Vérification 1 — la page s'affiche
 
-* Lancer `index.php` avec une extension type **PHP Server**
-* Vérifier que la page s’affiche :
+Lance le projet (PHP Server ou XAMPP/Laragon).  
+Ouvre l'URL racine du projet.
 
+Tu dois voir :
 ```
-Bienvenue sur mon projet
 Accueil
+Bienvenue sur mon projet.
 ```
+
+Si tu vois une page blanche ou une erreur PHP :
+- Vérifie les chemins dans les `require_once`
+- Vérifie que `$template` est bien défini avant `require_once("Views/base.php")`
+- Ajoute temporairement `var_dump($template);` avant le `require_once` pour déboguer
 
 ---
 
-## 7. Première requête sur la BDD
+## 9. Premier model — requête SELECT
 
-### 7.1 Créer un Model
-
-Exemple : `Models/carrelageModel.php`
+### Fichier : `Models/monProjetModel.php`
 
 ```php
 <?php
 
-// ===============================
-// SELECT ALL PRODUITS (CARRELAGE)
-// ===============================
-function selectAllCarrelage($pdo) {
-    try {
-        $query = "SELECT * FROM produit";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+// Adapte le nom de la fonction et le nom de la table à ton projet
+// Exemples : selectAllVoitures(), selectAllBateaux(), selectAllLivres()...
 
+function selectAllElements($pdo)
+{
+    try {
+        $query = 'SELECT * FROM NomDeTaTable';
+        // adapte NomDeTaTable au vrai nom de ta table SQL
+        $stmt  = $pdo->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll();
+        // fetchAll() retourne un tableau d'objets
     } catch (PDOException $e) {
         die($e->getMessage());
     }
 }
 ```
 
----
-
-### 7.2 Mettre à jour le Controller
-
-Exemple : `Controllers/carrelageController.php`
+### Mettre à jour le controller
 
 ```php
 <?php
-$uri = $_SERVER["REQUEST_URI"];
+$uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 
-require_once("Models/carrelageModel.php");
+require_once("Models/monProjetModel.php");
 
-if ($uri === "/index.php" || $uri === "/home") {
-    $carrelages = selectAllCarrelage($pdo);
-    $template = "Views/Carrelage/pageAccueil.php";
+if ($uri == "/" || $uri == "/index.php") {
+    $elements = selectAllElements($pdo);
+    // $elements sera disponible dans la vue
+    $title    = "Accueil";
+    $template = "Views/monProjet/pageAccueil.php";
 }
 
-require_once("Views/base.php");
+if (isset($template)) {
+    require_once("Views/base.php");
+}
 ```
 
----
-
-## 8. Résumé du fonctionnement
-
-* `index.php` = point d’entrée
-* `Controller` = logique + choix de la vue
-* `Model` = accès aux données (BDD)
-* `Views` = affichage HTML
-* `base.php` = structure globale du site
-
----
-
-## 9. Conseils importants
-
-* Toujours séparer :
-
-  * logique (Controller)
-  * données (Model)
-  * affichage (View)
-* Ne jamais faire de requêtes SQL directement dans les Views
-* Toujours utiliser `prepare()` pour éviter les injections SQL
-* Garder une structure claire et cohérente dès le début
-
----
-
-## 10. Relations entre tables : `SELECT` et "double SELECT" (2 clés étrangères)
-
-Certaines tables ne stockent pas juste des données simples.
-Elles servent de **table de liaison** entre plusieurs entités.
-
-Exemples dans ce projet :
-- `Reservation` relie une `Salle` et un `Utilisateur`
-- `Contenance` relie une `Salle` et un `Equipement`
-
-Concrètement, on enregistre dans une même ligne :
-- l'ID de la première table (`id_salle`)
-- l'ID de la deuxième table (`id_utilisateur` ou `id_equipement`)
-- puis les données métier (dates, quantité, etc.)
-
-Extrait SQL (structure logique d'une table de liaison) :
-
-```sql
-CREATE TABLE Reservation (
-    id_reservation INT PRIMARY KEY AUTO_INCREMENT,
-    id_salle INT NOT NULL,
-    id_utilisateur INT NOT NULL,
-    res_dateDebut DATE NOT NULL,
-    res_dateFin DATE NOT NULL,
-    FOREIGN KEY (id_salle) REFERENCES Salle(id_salle),
-    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
-);
-```
-
----
-
-### 10.1 Comment se passe l'`INSERT` avec 2 IDs
-
-Cas `Reservation` :
-- L'utilisateur choisit une salle (donc un `id_salle`)
-- L'`id_utilisateur` vient de la session
-- On ajoute aussi `dateDebut` et `dateFin`
+### Afficher dans la vue
 
 ```php
-$query = 'INSERT INTO Reservation (id_salle, id_utilisateur, res_dateDebut, res_dateFin)
-          VALUES (:idSalle, :idUtilisateur, :dateDebut, :dateFin)';
-```
+<h1>Accueil</h1>
 
-Extrait du modèle (liaison des valeurs au moment de l'insert) :
-
-```php
-$insertReservation->execute([
-    "idSalle" => $_POST["id_salle"],
-    "idUtilisateur" => $_SESSION["user"]->id_utilisateur,
-    "dateDebut" => $_POST["dateDebut"],
-    "dateFin" => $_POST["dateFin"]
-]);
-```
-
-Cas `Contenance` :
-- L'admin choisit une salle (`id_salle`)
-- L'admin choisit un équipement (`id_equipement`)
-- Il saisit la quantité
-
-```php
-$query = 'INSERT INTO Contenance (id_equipement, id_salle, cont_quantite)
-          VALUES (:idEquipement, :idSalle, :quantite)';
-```
-
-Extrait vue admin (2 listes déroulantes pour sélectionner les 2 IDs) :
-
-```php
-<select name="id_salle" id="contenance_salle">
-    <?php foreach ($salles as $salle) : ?>
-        <option value="<?= $salle->id_salle ?>"><?= $salle->sal_nom ?></option>
+<ul>
+    <?php foreach ($elements as $element) : ?>
+        <li><?= htmlspecialchars($element->nom_du_champ) ?></li>
+        <!-- adapte nom_du_champ au vrai nom de colonne dans ta table -->
     <?php endforeach ?>
-</select>
-
-<select name="id_equipement" id="contenance_equipement">
-    <?php foreach ($equipements as $equipement) : ?>
-        <option value="<?= $equipement->id_equipement ?>"><?= $equipement->equi_nom ?></option>
-    <?php endforeach ?>
-</select>
+</ul>
 ```
 
 ---
 
-### 10.2 Pourquoi on parle de "double SELECT"
+## 10. Vérification 2 — les données s'affichent
 
-Pour afficher une ligne compréhensible à l'écran, il faut souvent récupérer les infos de plusieurs tables.
+Tu dois voir la liste des éléments de ta table.
 
-Exemple : pour afficher une réservation, on veut voir :
-- le nom de la salle
-- le nom/prénom de l'utilisateur
-- les dates
-
-Donc on fait un `SELECT` avec `JOIN` :
-
-```sql
-SELECT Reservation.*, Salle.sal_nom, Utilisateur.uti_nom, Utilisateur.uti_prenom
-FROM Reservation
-INNER JOIN Salle ON Salle.id_salle = Reservation.id_salle
-INNER JOIN Utilisateur ON Utilisateur.id_utilisateur = Reservation.id_utilisateur
-```
-
-Extrait équivalent pour les contenances :
-
-```sql
-SELECT Contenance.*, Equipement.equi_nom, Salle.sal_nom, Salle.sal_numero
-FROM Contenance
-INNER JOIN Equipement ON Equipement.id_equipement = Contenance.id_equipement
-INNER JOIN Salle ON Salle.id_salle = Contenance.id_salle
-ORDER BY Salle.sal_nom, Equipement.equi_nom;
-```
-
-Même logique pour `Contenance` :
-- on joint `Contenance` + `Salle` + `Equipement`
-
-Idée clé à retenir :
-- les IDs servent au lien technique en base
-- les `JOIN` servent à afficher des données lisibles dans l'interface
-
-Extrait contrôleur (chargement des données nécessaires à l'affichage) :
+- Liste vide → insère des données de test dans phpMyAdmin
+- Erreur PDO → vérifie le nom exact de la table et des colonnes (casse comprise)
+- Page blanche → erreur PHP silencieuse, active les erreurs temporairement :
 
 ```php
-$salles = selectAllSalle($pdo);
-$equipements = selectAllEquipements($pdo);
-$contenances = selectAllContenances($pdo);
+// à mettre en haut de index.php pendant le développement
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 ```
 
 ---
 
-## 11. Gestion des sessions utilisateur
+## 11. Ajouter une deuxième route
 
-La session permet de "se souvenir" de l'utilisateur connecté entre les pages.
-
-### 11.1 Démarrage de session
-
-Dans `index.php`, on lance :
+Dans le controller, `elseif` pour chaque nouvelle URL :
 
 ```php
-session_start();
-```
+if ($uri == "/" || $uri == "/index.php") {
+    $elements = selectAllElements($pdo);
+    $title    = "Accueil";
+    $template = "Views/monProjet/pageAccueil.php";
 
-Sans ça, `$_SESSION` n'existe pas.
+} elseif ($uri == "/liste") {
+    // adapte /liste à l'URL de ta page
+    $elements = selectAllElements($pdo);
+    $title    = "Liste complète";
+    $template = "Views/monProjet/pageListe.php";
+}
 
-Extrait réel du point d'entrée :
-
-```php
-session_start();
-require_once("Config/connectDatabase.php");
-require_once("Controllers/userController.php");
-```
-
----
-
-### 11.2 Connexion (login)
-
-Après vérification email + mot de passe, on stocke l'utilisateur en session :
-
-```php
-$_SESSION["user"] = $user;
-```
-
-Extrait type (contrôleur de connexion) :
-
-```php
-$user = selectUserByEmailAndPassword($pdo);
-if ($user) {
-    $_SESSION["user"] = $user;
-    header("location:/");
-    exit;
+if (isset($template)) {
+    require_once("Views/base.php");
 }
 ```
 
-Ensuite, toutes les pages peuvent savoir :
-- qui est connecté
-- son rôle
-- son id
-
 ---
 
-### 11.3 Utilisation de la session dans le projet
+## 12. Route avec paramètre dans l'URL
 
-Exemples courants :
-- vérifier si l'utilisateur est connecté (`isset($_SESSION["user"])`)
-- récupérer son ID pour créer une réservation personnelle
-- afficher son prénom dans la navbar
-
-Extrait (protéger une page réservée) :
+Exemple : `/Article/Details/42` ou `/Bateau/Details/B01`
 
 ```php
-if (!isset($_SESSION["user"])) {
-    header("location:/connexion");
-    exit;
+$uri      = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+$segments = explode("/", trim($uri, "/"));
+// /Article/Details/42 → $segments = ["Article", "Details", "42"]
+
+if ($segments[0] == "Article" && isset($segments[1]) && $segments[1] == "Details") {
+    $id       = $segments[2];
+    // adapte Article et Details aux noms de ton projet
+    $element  = selectElementById($pdo, $id);
+    $title    = "Détail";
+    $template = "Views/monProjet/pageDetail.php";
 }
 ```
 
-Extrait (lier une réservation à l'utilisateur connecté) :
+Model correspondant :
 
 ```php
-$userId = $_SESSION["user"]->id_utilisateur;
-```
-
-Extrait (affichage dans la navbar) :
-
-```php
-<span><?= htmlspecialchars($_SESSION["user"]->uti_prenom) ?></span>
-```
-
----
-
-### 11.4 Mise à jour et suppression de session
-
-- Si l'utilisateur modifie son profil, on peut recharger ses données en session (`updateSession`)
-- À la déconnexion, on détruit la session :
-
-```php
-session_destroy();
-```
-
-Extrait (mise à jour de session après modification du profil) :
-
-```php
-updateUser($pdo);
-updateSession($pdo);
-header("location:/Profil");
-```
-
----
-
-## 12. Permissions par rôle et navbar dynamique
-
-Dans ce projet, il y a au minimum 2 rôles :
-- `admin`
-- `utilisateur`
-
-### 12.1 Contrôle d'accès par rôle
-
-Pour les routes `/admin`, le contrôleur vérifie :
-1. Utilisateur connecté
-2. Rôle = `admin`
-
-Si une condition échoue : redirection.
-
-Ce contrôle protège les pages même si quelqu'un tape l'URL manuellement.
-
-Extrait réel (contrôle admin côté serveur) :
-
-```php
-if (strpos($uri, "/admin") === 0) {
-    if (!isset($_SESSION["user"])) {
-        header("location:/connexion");
-        exit;
+function selectElementById($pdo, $id)
+{
+    try {
+        $query = 'SELECT * FROM NomDeTaTable WHERE id_nomtable = :id';
+        $stmt  = $pdo->prepare($query);
+        $stmt->execute(["id" => $id]);
+        return $stmt->fetch();
+        // fetch() retourne un seul objet (pas un tableau)
+    } catch (PDOException $e) {
+        die($e->getMessage());
     }
+}
+```
 
-    if ($_SESSION["user"]->uti_role != "admin") {
+Vue correspondante :
+
+```php
+<?php if ($element) : ?>
+    <h1><?= htmlspecialchars($element->nom_du_champ) ?></h1>
+    <p><?= htmlspecialchars($element->autre_champ) ?></p>
+<?php else : ?>
+    <p>Élément introuvable.</p>
+<?php endif ?>
+```
+
+---
+
+## 13. Ajouter des routes POST (formulaires)
+
+Un formulaire POST sur `/inscription` :
+
+```php
+if ($uri == "/inscription") {
+    if (isset($_POST["envoyer"])) {
+        // traitement du formulaire
+        insertElement($pdo);
         header("location:/");
         exit;
+        // TOUJOURS exit après header("location:...")
     }
+
+    $title    = "Inscription";
+    $template = "Views/users/pageInscription.php";
 }
 ```
 
----
-
-### 12.2 Navbar qui change selon l'état utilisateur
-
-La navbar est conditionnelle :
-
-Si personne n'est connecté :
-- boutons `Connexion` et `Inscription`
-
-Si un utilisateur est connecté :
-- liens utilisateur (profil, réservations, etc.)
-- avatar + prénom
-- bouton `Déconnexion`
-
-Si l'utilisateur connecté est admin :
-- menu déroulant `Admin`
-- accès vers dashboard et pages de gestion (`users`, `categories`, `salles`, `equipements`, `contenances`, `reservations`)
-
-Extrait navbar (partie invité) :
+Vue avec formulaire :
 
 ```php
-<?php if (isset($_SESSION["user"])) : ?>
-    <!-- contenu utilisateur connecté -->
-<?php else : ?>
-    <a href="/connexion" class="btn-outline-sm">Connexion</a>
-    <a href="/inscription" class="btn-sm">Inscription</a>
-<?php endif ?>
-```
-
-Extrait navbar (partie admin) :
-
-```php
-<?php if ($_SESSION["user"]->uti_role == "admin") : ?>
-    <div class="navbar-dropdown-menu">
-        <a href="/admin">Dashboard</a>
-        <a href="/admin/contenances">Contenances</a>
-        <a href="/admin/reservations">Réservations</a>
-    </div>
-<?php endif ?>
+<form method="POST">
+    <input type="text"   name="nom"    placeholder="Nom">
+    <input type="email"  name="email"  placeholder="Email">
+    <input type="submit" name="envoyer" value="Envoyer">
+</form>
 ```
 
 ---
 
-### 12.3 Pourquoi c'est important
+## 14. Résumé du flux MVC
 
-- L'interface (navbar) guide l'utilisateur selon son rôle
-- Les contrôleurs appliquent la vraie sécurité côté serveur
-- Les deux ensemble donnent une application claire et sécurisée
-
-Extrait récapitulatif (bonne pratique) :
-
-```php
-// Vue : masquer/afficher des liens selon la session
-// Contrôleur : toujours revérifier les droits avant traitement
+```text
+Requête HTTP
+    ↓
+index.php           session_start() + require_once controllers
+    ↓
+Controller          lit $uri avec parse_url()
+                    vérifie les droits (session, rôle)
+                    appelle les fonctions Model si besoin
+                    définit $template et $title
+    ↓
+Model               exécute les requêtes SQL
+                    retourne les données ($pdo->prepare + execute + fetch/fetchAll)
+    ↓
+Controller          passe les données aux vues via variables PHP ($elements, $item...)
+                    inclut Views/base.php si $template est défini
+    ↓
+Views/base.php      structure HTML globale
+                    inclut header.php, le $template, footer.php
+    ↓
+Vue ($template)     affiche les données avec foreach / if / htmlspecialchars
 ```
 
+Règles :
+- Requêtes SQL → uniquement dans les **Models**
+- Logique (conditions, redirections) → uniquement dans les **Controllers**
+- Affichage HTML → uniquement dans les **Views**
+- `require_once("Views/base.php")` → toujours à la **fin** du controller
+
 ---
+
+## 15. Guides complémentaires
+
+- [guide-session.md](guide-session.md) — inscription, connexion, session, profil
+- [guide-crud.md](guide-crud.md) — CRUD complet (admin : ajout, modification, suppression)
+- [guide-bdd.md](guide-bdd.md) — conception BDD, JOIN, tables de liaison
+- [vue-global.md](vue-global.md) — vue d'ensemble de l'architecture du projet
