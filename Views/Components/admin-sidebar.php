@@ -1,9 +1,11 @@
 <aside class="admin-sidebar">
+    <!-- Identité visuelle de l'espace admin. -->
     <div class="admin-sidebar-brand">
         <i data-lucide="building-2"></i>
         <span>RoomBook</span>
     </div>
 
+    <!-- Liens de navigation vers les différents modules de gestion. -->
     <a href="/admin" class="sidebar-link">
         <i data-lucide="layout-dashboard"></i>
         <span>Dashboard</span>
@@ -33,6 +35,7 @@
         <span>Réservations</span>
     </a>
 
+    <!-- Lien de retour vers la partie publique du site. -->
     <div class="admin-sidebar-footer">
         <a href="/" class="sidebar-link">
             <i data-lucide="arrow-left"></i>

@@ -1,6 +1,7 @@
 // Normalise une valeur pour que la recherche soit insensible aux majuscules,
 // aux accents et aux espaces superflus.
 function normalizeSearchValue(value) {
+    // Transforme la valeur en chaîne comparable pour simplifier les recherches.
     return String(value || "")
         .toLowerCase()
         .normalize("NFD")
@@ -58,86 +59,4 @@ function initSearchFilter(config) {
 
     // Le filtrage se lance à chaque modification du champ de recherche.
     input.addEventListener("input", filterItems);
-}
-
-// Initialise un filtre de recherche sur les options d'une liste déroulante.
-// La recherche réduit les choix affichés dans le select.
-function initSelectSearch(config) {
-    // Récupère le champ de recherche, le select et le message éventuel.
-    const input = document.querySelector(config.inputSelector);
-    const select = document.querySelector(config.selectSelector);
-    const emptyMessage = document.querySelector(config.emptySelector);
-
-    // Sans champ ou sans select, la fonctionnalité ne peut pas fonctionner.
-    if (!input || !select) {
-        return;
-    }
-
-    // Sauvegarde toutes les options d'origine avant de commencer à filtrer.
-    const sourceOptions = Array.from(select.options).map(function (option) {
-        return {
-            value: option.value,
-            text: option.textContent,
-            disabled: option.disabled
-        };
-    });
-
-    // Fonction appelée à chaque frappe dans la recherche.
-    const filterOptions = function () {
-        // Recherche normalisée pour comparer les libellés des options.
-        const query = normalizeSearchValue(input.value);
-        // Conserve la valeur actuellement sélectionnée pour essayer de la restaurer.
-        const currentValue = select.value;
-        // Indique si au moins une option non vide correspond à la recherche.
-        let hasMatch = false;
-
-        // On reconstruit le contenu du select à chaque saisie pour n'afficher que les options utiles.
-        select.innerHTML = "";
-
-        // Parcourt les options d'origine et garde seulement celles qui correspondent.
-        sourceOptions.forEach(function (optionData) {
-            // La première option vide est généralement un placeholder et doit rester disponible.
-            const isPlaceholder = optionData.value === "";
-            // Une option est conservée si elle est vide, si la recherche est vide,
-            // ou si son texte contient la requête.
-            const matches = isPlaceholder || query === "" || normalizeSearchValue(optionData.text).includes(query);
-
-            // Si l'option ne correspond pas, on ne l'ajoute pas au select.
-            if (!matches) {
-                return;
-            }
-
-            // Recrée une option DOM à partir des données sauvegardées.
-            const option = document.createElement("option");
-            option.value = optionData.value;
-            option.textContent = optionData.text;
-            option.disabled = optionData.disabled;
-
-            // Conserve la sélection actuelle si cette option existe encore après filtrage.
-            if (optionData.value === currentValue) {
-                option.selected = true;
-            }
-
-            // Une vraie option correspondante signifie qu'il y a au moins un résultat.
-            if (!isPlaceholder) {
-                hasMatch = true;
-            }
-
-            // Ajoute l'option filtrée dans la liste déroulante.
-            select.appendChild(option);
-        });
-
-        // Si la valeur sélectionnée n'existe plus, on réinitialise le select.
-        if (!Array.from(select.options).some(function (option) { return option.value === currentValue; })) {
-            select.value = "";
-        }
-
-        // Affiche le message d'absence de résultats quand aucune option ne correspond.
-        if (emptyMessage) {
-            emptyMessage.hidden = hasMatch || query === "";
-        }
-    };
-
-    // Le filtrage se déclenche à chaque changement du champ de recherche.
-    input.addEventListener("input", filterOptions);
 }

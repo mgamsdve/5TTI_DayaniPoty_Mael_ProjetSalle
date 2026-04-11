@@ -1,7 +1,9 @@
 <?php
+// Liste tous les utilisateurs pour les écrans de consultation.
 function selectAllUsers($pdo)
 {
     try {
+        // SELECT simple: on récupère toutes les colonnes de la table utilisateur.
         $query = 'select * from utilisateur';
         $selectUsers = $pdo->prepare($query); //préparer la query
         $selectUsers->execute(); //exécuter la query
@@ -16,6 +18,7 @@ function selectAllUsers($pdo)
 function selectUserById($pdo, $idUser)
 {
     try {
+        // SELECT avec WHERE pour cibler un seul compte par son identifiant.
         $query = 'SELECT * FROM Utilisateur WHERE id_utilisateur = :idUser';
         $selectUser = $pdo->prepare($query);
         $selectUser->execute([
@@ -32,6 +35,7 @@ function selectUserById($pdo, $idUser)
 function selectUserByEmail($pdo, $email)
 {
     try {
+        // Recherche un compte par email pour vérifier l'unicité ou l'authentification.
         $query = 'SELECT * FROM Utilisateur WHERE uti_email = :email';
         $selectUsersEmail = $pdo->prepare($query); //préparer la query
         $selectUsersEmail->execute([
@@ -47,6 +51,7 @@ function selectUserByEmail($pdo, $email)
 function insertUser($pdo)
 {
     try {
+        // INSERT d'un utilisateur classique avec mot de passe hashé.
         $query = 'INSERT INTO Utilisateur (uti_nom, uti_prenom, uti_email, uti_mdp, uti_role)
             VALUES (:nom, :prenom, :email, :mdp, :role)';
         $insertUser = $pdo->prepare($query); //préparer la query
@@ -66,6 +71,7 @@ function insertUser($pdo)
 function insertUserAdmin($pdo)
 {
     try {
+        // Variante admin de l'insertion: le rôle vient du formulaire de gestion.
         $query = 'INSERT INTO Utilisateur (uti_nom, uti_prenom, uti_email, uti_mdp, uti_role)
             VALUES (:nom, :prenom, :email, :mdp, :role)';
         $insertUser = $pdo->prepare($query);
@@ -85,6 +91,7 @@ function insertUserAdmin($pdo)
 function selectUserByEmailAndPassword($pdo)
 {
     try {
+        // On récupère l'utilisateur par email puis on vérifie son mot de passe hashé.
         $query = 'SELECT * FROM Utilisateur WHERE uti_email = :email';
         $selectUser = $pdo->prepare($query); //préparer la query
         $selectUser->execute([
@@ -104,6 +111,7 @@ function selectUserByEmailAndPassword($pdo)
 function updateUser($pdo)
 {
     try {
+        // Met à jour le profil du compte connecté sans toucher au rôle.
         $query = 'UPDATE utilisateur SET uti_nom = :nom, uti_prenom = :prenom, uti_email = :email
             WHERE id_utilisateur = :userId';
         $insertUser = $pdo->prepare($query); //préparer la query
@@ -122,6 +130,7 @@ function updateUser($pdo)
 function updateUserAdmin($pdo, $idUser)
 {
     try {
+        // Mise à jour complète d'un compte par l'admin, y compris le rôle.
         $query = 'UPDATE Utilisateur
             SET uti_nom = :nom, uti_prenom = :prenom, uti_email = :email, uti_role = :role
             WHERE id_utilisateur = :idUser';
@@ -142,6 +151,7 @@ function updateUserAdmin($pdo, $idUser)
 function updateUserAdminByGet($pdo)
 {
     try {
+        // Même logique que ci-dessus, mais la page admin envoie les données en GET.
         $idUser = (int) ($_GET["id_utilisateur"] ?? 0);
 
         $query = 'UPDATE Utilisateur
@@ -164,6 +174,7 @@ function updateUserAdminByGet($pdo)
 function updateSession($pdo)
 {
     try {
+        // Relit la ligne en base pour synchroniser les données en session.
         $query = 'SELECT * FROM Utilisateur WHERE id_utilisateur = :id';
         $selectUser = $pdo->prepare($query); //préparer la query
         $selectUser->execute([
@@ -180,6 +191,7 @@ function updateSession($pdo)
 function deleteUser($pdo)
 {
     try {
+        // Supprime le compte correspondant à l'utilisateur connecté.
         $query = 'DELETE FROM utilisateur WHERE id_utilisateur = :userId';
         $insertUser = $pdo->prepare($query); //préparer la query
         $insertUser->execute([
@@ -194,6 +206,7 @@ function deleteUser($pdo)
 function deleteUserById($pdo)
 {
     try {
+        // Supprime un compte précis à partir de l'id transmis dans la requête.
         $idUser = (int) ($_GET["id_utilisateur"] ?? 0);
 
         if ($idUser <= 0) {
@@ -214,6 +227,7 @@ function deleteUserById($pdo)
 function deleteUsersByIds($pdo)
 {
     try {
+        // Supprime plusieurs utilisateurs en boucle à partir des cases cochées.
         $userIds = $_POST["user_ids"] ?? [];
 
         if (empty($userIds)) {

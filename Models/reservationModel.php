@@ -1,8 +1,10 @@
 <?php
 
+// Récupère toutes les réservations avec les informations des FK pour l'admin.
 function selectAllReservations($pdo)
 {
     try {
+        // JOIN entre Reservation, Salle et Utilisateur pour enrichir l'affichage.
         $query = 'SELECT Reservation.*, Salle.sal_nom, Salle.sal_numero, Utilisateur.uti_nom, Utilisateur.uti_prenom
             FROM Reservation
             INNER JOIN Salle ON Salle.id_salle = Reservation.id_salle
@@ -21,6 +23,7 @@ function selectAllReservations($pdo)
 function selectReservationById($pdo, $idReservation)
 {
     try {
+        // Lit une seule réservation à partir de son identifiant.
         $query = 'SELECT * FROM Reservation WHERE id_reservation = :idReservation';
         $selectReservation = $pdo->prepare($query); //preparer la query
         $selectReservation->execute([
@@ -37,6 +40,7 @@ function selectReservationById($pdo, $idReservation)
 function selectReservationsByUserId($pdo, $idUtilisateur)
 {
     try {
+        // Filtre les réservations d'un utilisateur pour la page "Mes réservations".
         $query = 'SELECT Reservation.*, Salle.sal_nom, Salle.sal_image, Salle.sal_numero
             FROM Reservation
             INNER JOIN Salle ON Salle.id_salle = Reservation.id_salle
@@ -57,6 +61,7 @@ function selectReservationsByUserId($pdo, $idUtilisateur)
 function selectReservationsBySalleId($pdo, $idSalle)
 {
     try {
+        // Récupère les réservations liées à une salle précise.
         $query = 'SELECT Reservation.*, Salle.sal_nom, Salle.sal_image, Utilisateur.uti_nom, Utilisateur.uti_prenom
             FROM Reservation
             INNER JOIN Salle ON Salle.id_salle = Reservation.id_salle
@@ -78,6 +83,7 @@ function selectReservationsBySalleId($pdo, $idSalle)
 function insertReservation($pdo)
 {
     try {
+        // Insère une réservation simple liée à l'utilisateur connecté.
         $userId = $_SESSION["user"]->id_utilisateur;
         $query = 'INSERT INTO Reservation (id_salle, id_utilisateur, res_dateDebut, res_dateFin)
             VALUES (:idSalle, :idUtilisateur, :dateDebut, :dateFin)';
@@ -97,6 +103,7 @@ function insertReservation($pdo)
 function insertReservationsMultiForUser($pdo)
 {
     try {
+        // Prépare une insertion répétée pour créer une réservation par salle sélectionnée.
         $idSalles = $_POST["id_salles"] ?? [];
         $idUtilisateur = (int) $_SESSION["user"]->id_utilisateur;
         $dateDebut = $_POST["dateDebut"] ?? "";
@@ -127,6 +134,7 @@ function insertReservationsMultiForUser($pdo)
 function updateReservation($pdo, $idReservation)
 {
     try {
+        // Met à jour les champs principaux d'une réservation utilisateur.
         $query = 'UPDATE Reservation
             SET id_salle = :idSalle, res_dateDebut = :dateDebut, res_dateFin = :dateFin
             WHERE id_reservation = :idReservation';
@@ -146,6 +154,7 @@ function updateReservation($pdo, $idReservation)
 function insertReservationAdmin($pdo)
 {
     try {
+        // Version admin de l'insertion: l'utilisateur concerné est choisi dans le formulaire.
         $query = 'INSERT INTO Reservation (id_salle, id_utilisateur, res_dateDebut, res_dateFin)
             VALUES (:idSalle, :idUtilisateur, :dateDebut, :dateFin)';
         $insertReservation = $pdo->prepare($query);
@@ -164,6 +173,7 @@ function insertReservationAdmin($pdo)
 function updateReservationAdmin($pdo, $idReservation)
 {
     try {
+        // Met à jour une réservation avec la salle, l'utilisateur et les dates.
         $query = 'UPDATE Reservation
             SET id_salle = :idSalle, id_utilisateur = :idUtilisateur, res_dateDebut = :dateDebut, res_dateFin = :dateFin
             WHERE id_reservation = :idReservation';
@@ -184,6 +194,7 @@ function updateReservationAdmin($pdo, $idReservation)
 function deleteReservation($pdo, $idReservation)
 {
     try {
+        // Supprime une réservation identifiée par son id.
         $query = 'DELETE FROM Reservation WHERE id_reservation = :idReservation';
         $deleteReservation = $pdo->prepare($query); //preparer la query
         $deleteReservation->execute([

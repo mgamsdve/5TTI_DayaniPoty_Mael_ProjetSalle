@@ -1,8 +1,11 @@
 <?php
+// Sélectionne quelques salles à mettre en avant sur la page d'accueil.
 $featuredSalles = array_slice($salles ?? [], 0, 3);
+// Compte les salles pour alimenter le compteur visuel du hero.
 $sallesCount = count($salles ?? []);
 ?>
 
+<!-- Page d'accueil orientée présentation du service. -->
 <div class="home-page">
     <section class="hero-section animate-on-scroll">
         <div class="hero-inner">
@@ -26,6 +29,7 @@ $sallesCount = count($salles ?? []);
     </section>
 
     <section class="stats-section animate-on-scroll" id="stats-section">
+        <!-- Bloc de chiffres clés animé au chargement. -->
         <div class="stats-grid">
             <article class="stat-card">
                 <div class="stat-icon">&#127970;</div>
@@ -46,6 +50,7 @@ $sallesCount = count($salles ?? []);
     </section>
 
     <section class="how-it-works animate-on-scroll">
+        <!-- Explique le parcours utilisateur en quelques étapes simples. -->
         <div class="steps-row">
             <div class="step">
                 <div class="step-number">1</div>
@@ -68,9 +73,11 @@ $sallesCount = count($salles ?? []);
     </section>
 
     <section class="featured-section animate-on-scroll">
+        <!-- Met en avant un petit échantillon de salles pour inciter à réserver. -->
         <h2 class="section-title">Salles en vedette</h2>
         <div class="featured-grid">
             <?php if (!empty($featuredSalles)): ?>
+                <!-- Quand des salles existent, on affiche leurs cartes une par une. -->
                 <?php foreach ($featuredSalles as $salle): ?>
                     <article class="room-card">
                         <div class="room-media">
@@ -89,6 +96,7 @@ $sallesCount = count($salles ?? []);
                     </article>
                 <?php endforeach; ?>
             <?php else: ?>
+                <!-- Sinon, on affiche des cartes de démonstration pour garder une page visuellement riche. -->
                 <?php for ($i = 1; $i <= 3; $i++): ?>
                     <article class="room-card">
                         <div class="room-media">
@@ -107,9 +115,11 @@ $sallesCount = count($salles ?? []);
     </section>
 
     <section class="final-cta animate-on-scroll">
+        <!-- Appel à l'action final pour pousser vers la liste complète des salles. -->
         <h2>Pret a reserver votre espace ?</h2>
         <a href="/Salle" class="btn final-button">Voir toutes les salles</a>
     </section>
 </div>
 
+<!-- Script dédié aux animations de la page d'accueil. -->
 <script src="/Assets/JS/home.js"></script>

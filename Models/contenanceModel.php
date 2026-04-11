@@ -1,8 +1,10 @@
 <?php
 
+// Liste toutes les relations salle-équipement pour l'écran d'administration.
 function selectAllContenances($pdo)
 {
     try {
+        // JOIN sur Equipement et Salle pour afficher des libellés compréhensibles.
         $query = 'SELECT Contenance.*, Equipement.equi_nom, Salle.sal_nom, Salle.sal_numero
             FROM Contenance
             INNER JOIN Equipement ON Equipement.id_equipement = Contenance.id_equipement
@@ -21,6 +23,7 @@ function selectAllContenances($pdo)
 function selectContenancesBySalleId($pdo, $idSalle)
 {
     try {
+        // Filtre les équipements présents dans une salle donnée.
         $query = 'SELECT Contenance.*, Equipement.equi_nom, Equipement.equi_description
             FROM Contenance
             INNER JOIN Equipement ON Equipement.id_equipement = Contenance.id_equipement
@@ -41,6 +44,7 @@ function selectContenancesBySalleId($pdo, $idSalle)
 function insertContenance($pdo)
 {
     try {
+        // Ajoute une relation avec la quantité d'équipement dans la salle.
         $query = 'INSERT INTO Contenance (id_equipement, id_salle, cont_quantite)
             VALUES (:idEquipement, :idSalle, :quantite)';
         $insertContenance = $pdo->prepare($query); //preparer la query
@@ -58,6 +62,7 @@ function insertContenance($pdo)
 function updateContenance($pdo, $idContenance)
 {
     try {
+        // Modifie la relation existante et la quantité associée.
         $query = 'UPDATE Contenance
             SET id_equipement = :idEquipement, id_salle = :idSalle, cont_quantite = :quantite
             WHERE id_contenance = :idContenance';
@@ -77,6 +82,7 @@ function updateContenance($pdo, $idContenance)
 function deleteContenance($pdo, $idContenance)
 {
     try {
+        // Supprime la ligne de relation indiquée.
         $query = 'DELETE FROM Contenance WHERE id_contenance = :idContenance';
         $deleteContenance = $pdo->prepare($query); //preparer la query
         $deleteContenance->execute([

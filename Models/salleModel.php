@@ -1,6 +1,8 @@
 <?php
+// Retourne une image aléatoire pour éviter de devoir saisir une image à la main.
 function getRandomSalleImageUrl()
 {
+    // Liste d'images publiques prêtes à l'emploi pour illustrer les salles.
     $images = [
         'https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         'https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -30,6 +32,7 @@ function getRandomSalleImageUrl()
 function selectAllSalle($pdo)
 {
     try {
+        // Récupère toutes les salles sans filtre pour les pages publiques et admin.
         $query = 'select * from salle';
         $selectSalle = $pdo->prepare($query); //préparer la query
         $selectSalle->execute(); //exécuter la query
@@ -44,6 +47,7 @@ function selectAllSalle($pdo)
 function selectSallesByCategorieId($pdo, $idCategorie)
 {
     try {
+        // Filtre les salles en fonction de leur catégorie.
         $query = 'SELECT * FROM Salle WHERE id_categorie = :idCategorie ORDER BY sal_nom';
         $selectSalles = $pdo->prepare($query); //preparer la query
         $selectSalles->execute([
@@ -60,6 +64,7 @@ function selectSallesByCategorieId($pdo, $idCategorie)
 function insertSalle($pdo)
 {
     try {
+        // Ajoute une salle avec une image générée automatiquement.
         $query = 'INSERT INTO Salle (id_categorie, sal_nom, sal_taille, sal_numero, sal_image)
             VALUES (:idCategorie, :nom, :taille, :numero, :image)';
         $insertSalle = $pdo->prepare($query); //preparer la query
@@ -79,6 +84,7 @@ function insertSalle($pdo)
 function updateSalle($pdo, $idSalle)
 {
     try {
+        // Met à jour les informations principales d'une salle existante.
         $query = 'UPDATE Salle
             SET id_categorie = :idCategorie, sal_nom = :nom, sal_taille = :taille, sal_numero = :numero, sal_image = :image
             WHERE id_salle = :idSalle';
@@ -100,6 +106,7 @@ function updateSalle($pdo, $idSalle)
 function deleteSalle($pdo, $idSalle)
 {
     try {
+        // Supprime une salle via son identifiant primaire.
         $query = 'DELETE FROM Salle WHERE id_salle = :idSalle';
         $deleteSalle = $pdo->prepare($query); //preparer la query
         $deleteSalle->execute([
@@ -114,6 +121,7 @@ function deleteSalle($pdo, $idSalle)
 function deleteSallesByIds($pdo)
 {
     try {
+        // Supprime plusieurs salles à partir des identifiants sélectionnés.
         $salleIds = $_POST["salle_ids"] ?? [];
 
         if (empty($salleIds)) {
@@ -137,6 +145,7 @@ function deleteSallesByIds($pdo)
 function selectSalleByNumero($pdo, $numeroSalle)
 {
     try {
+        // Cherche une salle via son numéro lisible dans l'URL de détail.
         $query = 'SELECT * FROM Salle WHERE sal_numero = :numeroSalle';
         $selectSalle = $pdo->prepare($query); //preparer la query
         $selectSalle->execute([

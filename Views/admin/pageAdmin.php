@@ -1,9 +1,12 @@
+<!-- Layout principal du tableau de bord d'administration. -->
 <div class="admin-layout">
     <?php require_once("Views/Components/admin-sidebar.php"); ?>
+    <!-- Zone de contenu principale du dashboard. -->
     <div class="admin-content">
         <h1>Administration</h1>
         <p class="section-copy">Gérez toutes les ressources de l'application.</p>
 
+        <!-- Barre de recherche pour filtrer les modules du dashboard. -->
         <div class="admin-search" role="search">
             <label for="admin-home-search-input">Rechercher un module</label>
             <input
@@ -14,6 +17,7 @@
             >
         </div>
 
+        <!-- Cartes d'accès rapide vers les modules principaux. -->
         <div class="admin-kpi-grid">
             <div class="admin-kpi" data-search="utilisateurs comptes roles user">
                 <div class="admin-kpi-icon"><i data-lucide="users"></i></div>
@@ -53,10 +57,12 @@
             </div>
         </div>
 
+        <!-- Message affiché si aucun module ne correspond au texte recherché. -->
         <p id="admin-home-no-results" class="admin-no-results" hidden>Aucun module ne correspond à votre recherche.</p>
     </div>
 </div>
 
+<!-- Initialise le filtre de recherche sur les cartes du dashboard. -->
 <script>
     initSearchFilter({
         inputSelector: "#admin-home-search-input",

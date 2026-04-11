@@ -1,3 +1,4 @@
+<!-- Barre d'action pour aller rapidement vers la création d'une réservation. -->
 <div class="page-header">
     <h1>Mes Réservations</h1>
     <a href="/create-reservation" class="btn">
@@ -7,12 +8,14 @@
 </div>
 
 <?php if (empty($reservations)) : ?>
+    <!-- Si l'utilisateur n'a encore rien réservé, on affiche un état vide. -->
     <div class="empty-state">
         <i data-lucide="calendar-x" class="empty-state__icon icon-48 icon-muted"></i>
         <p class="empty-state__text">Vous n'avez aucune réservation pour le moment.</p>
         <a href="/Salle" class="btn">Voir les salles disponibles</a>
     </div>
 <?php else : ?>
+    <!-- Sinon, on affiche une liste filtrable des réservations existantes. -->
     <div class="list-search" role="search">
         <label for="reservation-search-input">Rechercher une réservation</label>
         <input
@@ -23,8 +26,10 @@
         >
     </div>
 
+    <!-- Chaque réservation est rendue sous forme de carte pour garder la lecture simple. -->
     <div class="Salle-container">
         <?php foreach ($reservations as $reservation): ?>
+            <!-- La data-search permet au script de filtrer sur plusieurs infos en même temps. -->
             <div
                 class="salle"
                 data-search="<?= htmlspecialchars(strtolower($reservation->sal_nom . ' ' . $reservation->sal_numero . ' ' . $reservation->res_dateDebut . ' ' . $reservation->res_dateFin . ' ' . $reservation->id_reservation), ENT_QUOTES, 'UTF-8') ?>"
@@ -47,10 +52,12 @@
                     Réservation #<?= $reservation->id_reservation ?>
                 </p>
                 <div class="salle-link">
+                    <!-- Formulaire caché pour envoyer la suppression au contrôleur. -->
                     <form method="POST" action="/delete-reservation" id="delete-reservation-<?= $reservation->id_reservation ?>">
                         <input type="hidden" name="action" value="deleteReservation">
                         <input type="hidden" name="id_reservation" value="<?= $reservation->id_reservation ?>">
                     </form>
+                    <!-- Le lien visible déclenche la suppression après confirmation. -->
                     <a href="#"
                        class="btn-delete"
                        onclick="if (confirm('Confirmer la suppression de cette réservation ?')) { document.getElementById('delete-reservation-<?= $reservation->id_reservation ?>').submit(); } return false;">
@@ -62,8 +69,10 @@
         <?php endforeach; ?>
     </div>
 
+    <!-- Message affiché si le filtre ne trouve aucune réservation correspondante. -->
     <p id="reservation-no-results" class="list-no-results" hidden>Aucune réservation ne correspond à votre recherche.</p>
 
+    <!-- Active le filtre de recherche sur la liste des réservations. -->
     <script>
         initSearchFilter({
             inputSelector: "#reservation-search-input",

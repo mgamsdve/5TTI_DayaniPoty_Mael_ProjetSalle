@@ -1,8 +1,10 @@
 <?php
 
+// Liste toutes les catégories pour remplir les selects et tableaux.
 function selectAllCategories($pdo)
 {
     try {
+        // Tri alphabétique pour garder une présentation cohérente.
         $query = 'SELECT * FROM Categorie ORDER BY cat_nom';
         $selectCategories = $pdo->prepare($query);
         $selectCategories->execute();
@@ -17,6 +19,7 @@ function selectAllCategories($pdo)
 function selectCategoryById($pdo, $idCategory)
 {
     try {
+        // Lit une catégorie précise à partir de son identifiant.
         $query = 'SELECT * FROM Categorie WHERE id_categorie = :idCategory';
         $selectCategory = $pdo->prepare($query); //preparer la query
         $selectCategory->execute([
@@ -33,6 +36,7 @@ function selectCategoryById($pdo, $idCategory)
 function insertCategory($pdo)
 {
     try {
+        // Ajoute une nouvelle catégorie avec son nom.
         $query = 'INSERT INTO Categorie (cat_nom) VALUES (:nom)';
         $insertCategory = $pdo->prepare($query); //preparer la query
         $insertCategory->execute([
@@ -47,6 +51,7 @@ function insertCategory($pdo)
 function updateCategory($pdo, $idCategory)
 {
     try {
+        // Renomme la catégorie choisie par l'administration.
         $query = 'UPDATE Categorie SET cat_nom = :nom WHERE id_categorie = :idCategory';
         $updateCategory = $pdo->prepare($query); //preparer la query
         $updateCategory->execute([
@@ -62,6 +67,7 @@ function updateCategory($pdo, $idCategory)
 function deleteCategory($pdo, $idCategory)
 {
     try {
+        // Supprime la catégorie ciblée.
         $query = 'DELETE FROM Categorie WHERE id_categorie = :idCategory';
         $deleteCategory = $pdo->prepare($query); //preparer la query
         $deleteCategory->execute([

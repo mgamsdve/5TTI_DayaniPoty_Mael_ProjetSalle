@@ -1,13 +1,17 @@
 <div class="auth-card">
+    <!-- Formulaire de création d'une ou plusieurs réservations. -->
     <h1>Nouvelle réservation</h1>
 
+    <!-- Affiche un message d'erreur métier si la validation serveur échoue. -->
     <?php if (!empty($erreurReservation)) : ?>
         <p class="form-error"><?= htmlspecialchars($erreurReservation) ?></p>
     <?php endif; ?>
 
+    <!-- Le formulaire envoie plusieurs salles sur la même période. -->
     <form action="/create-reservation" method="POST">
         <input type="hidden" name="action" value="createReservation">
         <div class="form-group">
+            <!-- Le multi-select permet de créer plusieurs lignes de réservation en une fois. -->
             <label for="id_salles">Salles (selection multiple)</label>
             <select name="id_salles[]" id="id_salles" multiple required size="8">
                 <?php foreach ($salles as $salle) : ?>
@@ -40,3 +44,5 @@
         </div>
     </form>
 </div>
+<!-- Validation JavaScript dédiée aux règles sur les dates. -->
+<script src="/Assets/JS/form-reservation.js"></script>

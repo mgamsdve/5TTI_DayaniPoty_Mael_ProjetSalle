@@ -1,8 +1,10 @@
 <?php
 
+// Liste tous les équipements disponibles.
 function selectAllEquipements($pdo)
 {
     try {
+        // Tri alphabétique pour faciliter la lecture dans l'interface.
         $query = 'SELECT * FROM Equipement ORDER BY equi_nom';
         $selectEquipements = $pdo->prepare($query); //preparer la query
         $selectEquipements->execute(); //executer la query
@@ -17,6 +19,7 @@ function selectAllEquipements($pdo)
 function selectEquipementById($pdo, $idEquipement)
 {
     try {
+        // Charge un équipement précis pour une modification ou une consultation.
         $query = 'SELECT * FROM Equipement WHERE id_equipement = :idEquipement';
         $selectEquipement = $pdo->prepare($query); //preparer la query
         $selectEquipement->execute([
@@ -33,6 +36,7 @@ function selectEquipementById($pdo, $idEquipement)
 function insertEquipement($pdo)
 {
     try {
+        // Crée un nouvel équipement dans la table dédiée.
         $query = 'INSERT INTO Equipement (equi_nom, equi_description)
             VALUES (:nom, :description)';
         $insertEquipement = $pdo->prepare($query); //preparer la query
@@ -49,6 +53,7 @@ function insertEquipement($pdo)
 function updateEquipement($pdo, $idEquipement)
 {
     try {
+        // Met à jour le nom et la description d'un équipement.
         $query = 'UPDATE Equipement
             SET equi_nom = :nom, equi_description = :description
             WHERE id_equipement = :idEquipement';
@@ -67,6 +72,7 @@ function updateEquipement($pdo, $idEquipement)
 function deleteEquipement($pdo, $idEquipement)
 {
     try {
+        // Supprime l'équipement correspondant à l'identifiant transmis.
         $query = 'DELETE FROM Equipement WHERE id_equipement = :idEquipement';
         $deleteEquipement = $pdo->prepare($query); //preparer la query
         $deleteEquipement->execute([

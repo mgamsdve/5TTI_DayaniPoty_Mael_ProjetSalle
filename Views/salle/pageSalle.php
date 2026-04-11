@@ -1,3 +1,4 @@
+<!-- En-tête de page avec accès rapide à la création d'une réservation. -->
 <div class="page-header">
     <h1>Salles disponibles</h1>
     <a href="/create-reservation" class="btn">
@@ -6,6 +7,7 @@
     </a>
 </div>
 
+<!-- Champ de recherche qui sera exploité par le filtre JavaScript. -->
 <div class="salle-search" role="search">
     <label for="salle-search-input">Rechercher une salle</label>
     <input
@@ -16,8 +18,10 @@
     >
 </div>
 
+<!-- Liste des salles affichées sous forme de cartes. -->
 <div class="Salle-container">
     <?php foreach ($salles as $salle): ?>
+        <!-- Chaque carte contient les données principales d'une salle. -->
         <div
             class="salle"
             data-search="<?= htmlspecialchars(strtolower($salle->sal_nom . ' ' . $salle->sal_numero . ' ' . $salle->sal_taille), ENT_QUOTES, 'UTF-8') ?>"
@@ -35,8 +39,10 @@
     <?php endforeach; ?>
 </div>
 
+<!-- Message affiché si le filtre ne trouve aucune correspondance. -->
 <p id="salle-no-results" class="salle-no-results" hidden>Aucune salle ne correspond à votre recherche.</p>
 
+<!-- Initialise le filtre sur la liste des salles. -->
 <script>
     initSearchFilter({
         inputSelector: "#salle-search-input",
