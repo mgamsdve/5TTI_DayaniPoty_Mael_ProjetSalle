@@ -1,7 +1,7 @@
 # Projet Salle - Application de reservation de salles
 
-
 ## Lien Utiles
+- [Repo complet du guide](https://github.com/mgamsdve/GuideProjet)
 
 - [Google Slides](https://docs.google.com/presentation/d/1oUtDvOm9PPslUE7LXXXopBRl5ctr8XTi/edit?usp=sharing&ouid=115021727874337636729&rtpof=true&sd=true)
 - [Site Web](https://bookroom-wheat.vercel.app/)
@@ -13,7 +13,6 @@
 - ```php
    secure@demo.be
   ```
-- [Repo complet du code](https://github.com/mgamsdve/5TTI_DayaniPoty_Mael_ProjetSalle)
 
 Les deux versions Google Docs des fichiers de référence sont ici :
 
